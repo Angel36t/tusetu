@@ -7,7 +7,7 @@ export default function WorkshopsLayout() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-start gap-8 p-8 bg-blue-50">
+    <div className="flex justify-start gap-8 p-8">
       {workshopsData.map((workshop) => (
         <WorkshopCard
           key={workshop.id}
@@ -44,12 +44,7 @@ function WorkshopCard({ workshop, navigate }) {
   return (
     <div
       className="w-64 bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center"
-      style={{
-        border: "1px solid #E0E7FF",
-        backgroundColor: "#F0F7FF",
-        boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
-        padding: "1.5rem",
-      }}
+  
     >
       <div className="relative w-24 h-24 flex items-center justify-center">
         <svg

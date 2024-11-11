@@ -19,20 +19,17 @@ export function WorkshopCard() {
   );
 }
 
-// Componente para la tarjeta de progreso con animación de porcentaje
 function WorkshopProgressCard({ workshop }) {
   const [animatedProgress, setAnimatedProgress] = useState(0);
 
   useEffect(() => {
-    // Inicia la animación del progreso
     if (animatedProgress < workshop.progress) {
       const interval = setInterval(() => {
         setAnimatedProgress((prev) =>
           prev + 1 >= workshop.progress ? workshop.progress : prev + 1
         );
-      }, 20); // Aumenta el valor cada 20 ms
+      }, 20); 
 
-      // Limpia el intervalo cuando se alcance el progreso deseado
       return () => clearInterval(interval);
     }
   }, [animatedProgress, workshop.progress]);

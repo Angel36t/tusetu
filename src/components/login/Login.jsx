@@ -1,31 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { useAuth } from '../../context/AuthContext';
+import { useUser } from "../../context/UserContext";
 
 function Login() {
-  const { login, rememberMe, setRememberMe, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const location = useLocation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const { setUser } = useUser();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/inicio');
-    }
-  }, [isAuthenticated, navigate]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (email === 'user@example.com' && password === 'password123') {
-      login(email, password, rememberMe);
-      navigate('/inicio');
-    } else {
-      alert('Credenciales incorrectas');
-    }
+  // Función para autenticar al usuario
+  const authenticateUser = (email, password) => {
+    return email === "arbt18@gmail.com" && password === "Bata990818";
   };
 
+  useEffect(() => {
+    const authData = localStorage.getItem("authData");
+    if (authData) {
+      const { email, password } = JSON.parse(authData);
+      if (authenticateUser(email, password)) {
+        const userInfo = { email };
+        setUser(userInfo);
+        navigate("/inicio");
+      }
+    }
+  }, [setUser, navigate]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (authenticateUser(email, password)) {
+      const userInfo = { email };
+      setUser(userInfo);
+
+      if (rememberMe) {
+        localStorage.setItem("authData", JSON.stringify({ email, password }));
+      } else {
+        localStorage.removeItem("authData");
+      }
+
+      const redirectPath = location.state?.from?.pathname || "/inicio";
+      navigate(redirectPath);
+    } else {
+      console.error("Credenciales incorrectas");
+    }
+  };
+  
   return (
     <div className="flex flex-col items-center min-h-screen bg-[#f7f9fa]">
       <div
@@ -35,7 +57,8 @@ function Login() {
         <div className="text-center text-white">
           <h1 className="text-4xl font-bold pb-6">ALEXANDER ASSAD</h1>
           <p className="mt-2 pb-6">
-            Mi propósito es ayudarte a experimentar tu <br /> Experiencia Humana llena de BIENESTAR y aprovechando todo tu POTENCIAL
+            Mi propósito es ayudarte a experimentar tu <br /> Experiencia Humana
+            llena de BIENESTAR y aprovechando todo tu POTENCIAL
           </p>
         </div>
       </div>
@@ -45,11 +68,16 @@ function Login() {
           <img src="assets/login/logo.png" alt="Logo" className="w-26 h-24" />
         </div>
 
-        <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Login</h2>
+        <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">
+          Login
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-600" htmlFor="email">
+            <label
+              className="block text-sm font-medium text-gray-600"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -59,11 +87,15 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-600" htmlFor="password">
+            <label
+              className="block text-sm font-medium text-gray-600"
+              htmlFor="password"
+            >
               Password
             </label>
             <input
@@ -73,6 +105,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+              required
             />
           </div>
 
@@ -81,7 +114,7 @@ function Login() {
               type="checkbox"
               id="rememberMe"
               checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
+              onChange={(e) => setRememberMe(e.target.checked)}
               className="mr-2"
             />
             <label htmlFor="rememberMe" className="text-sm text-gray-600">
@@ -91,7 +124,7 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full py-2 mt-4 text-white bg-custom-dark rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-custom-dark focus:ring-opacity-50"
+            className="w-full py-2 mt-4 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
           >
             INGRESAR
           </button>
