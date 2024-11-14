@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { valuesData } from "../config/valuesData";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import CongratulationsSecondary from "./CongratulationsSecondary";
 
 function ValuesComponent() {
   const mainValues = [
@@ -89,13 +90,15 @@ function ValuesComponent() {
   return (
     <div className="overflow-x-auto max-w-5xl mx-auto mt-8 px-4">
       {isSaved ? (
-        <div className="flex justify-center items-center h-64">
-          <p className="text-lg font-semibold text-green-600">
-            Los valores secundarios se han agregado correctamente.
-          </p>
-        </div>
+    <CongratulationsSecondary/>
       ) : (
         <>
+          <h2 className="text-2xl font-bold text-center mb-4">
+            Selecciona tus valores secundarios
+          </h2>
+          <p className="text-gray-500 text-center mb-6">
+            Puedes seleccionar hasta maximo 7 valores secundarios por cada valor principal.
+          </p>
           <table className="w-full bg-white border border-gray-200 rounded-lg shadow-sm text-sm">
             <thead>
               <tr className="bg-gray-100 text-gray-700 uppercase">
@@ -241,4 +244,3 @@ function ValuesComponent() {
 }
 
 export default ValuesComponent;
-

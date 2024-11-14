@@ -58,6 +58,36 @@ const UsersLayout = () => {
       },
       status: "Activo",
     },
+    {
+      name: "Evan Yates",
+      email: "evanyates@gmail.com",
+      avatar: "https://indiehoy.com/wp-content/uploads/2020/11/dread-mar-i.jpg",
+      lastLogin: {
+        date: "12/02/2024",
+        time: "12:04pm",
+      },
+      status: "Activo",
+    },
+    {
+      name: "Evan Yates",
+      email: "evanyates@gmail.com",
+      avatar: "https://indiehoy.com/wp-content/uploads/2020/11/dread-mar-i.jpg",
+      lastLogin: {
+        date: "12/02/2024",
+        time: "12:04pm",
+      },
+      status: "Activo",
+    },
+    {
+      name: "Evan Yates",
+      email: "evanyates@gmail.com",
+      avatar: "https://indiehoy.com/wp-content/uploads/2020/11/dread-mar-i.jpg",
+      lastLogin: {
+        date: "12/02/2024",
+        time: "12:04pm",
+      },
+      status: "Activo",
+    },
   ];
 
   return (

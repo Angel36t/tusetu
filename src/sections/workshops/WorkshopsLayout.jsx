@@ -7,15 +7,21 @@ export default function WorkshopsLayout() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-start gap-8 p-8">
-      {workshopsData.map((workshop) => (
-        <WorkshopCard
-          key={workshop.id}
-          workshop={workshop}
-          navigate={navigate}
-        />
-      ))}
-    </div>
+    <>
+      <h1 className="text-4xl font-bold text-gray-800 ml-6 mt-4">
+        Tu <span className="text-blue-500">se tu!</span>
+      </h1>
+
+      <div className="flex justify-start gap-8 p-8">
+        {workshopsData.map((workshop) => (
+          <WorkshopCard
+            key={workshop.id}
+            workshop={workshop}
+            navigate={navigate}
+          />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -42,10 +48,7 @@ function WorkshopCard({ workshop, navigate }) {
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
-    <div
-      className="w-64 bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center"
-  
-    >
+    <div className="w-64 bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center">
       <div className="relative w-24 h-24 flex items-center justify-center">
         <svg
           width="100%"

@@ -3,9 +3,10 @@ import { useWindowSize } from "react-use";
 import { Dialog, Transition } from "@headlessui/react";
 
 import React, { Fragment, useState } from "react";
-import { useCompositionContext } from "../../../../context/CompositionContext";
+import { useCompositionContext } from "../../../context/CompositionContext";
+// import { useCompositionContext } from "../../../../context/CompositionContext";
 
-export default function CongratulationsDialog() {
+export default function CongratulationsSecondary() {
   const [isOpen, setIsOpen] = useState(true);
   const { width, height } = useWindowSize();
 
@@ -53,15 +54,15 @@ export default function CongratulationsDialog() {
                   </Dialog.Title>
                   <div className="mt-4 flex flex-col items-center">
                     <img
-                      src="/assets/badges/gold-medal.png"
+                      src="/assets/badges/silver-medal.png"
                       alt="Insignia de 10 valores"
                       className="h-24 mb-4"
                     />
                     <h3 className="text-xl font-semibold text-yellow-600">
-                      Insignia de 10 Valores
+                      Insignia de valores secundarios
                     </h3>
                     <p className="text-gray-600 mt-2 text-center">
-                      ¡Felicidades! Has identificado tus 10 valores principales.
+                      ¡Felicidades! Has identificado tus valores secundarios.
                     </p>
                   </div>
 
@@ -70,7 +71,7 @@ export default function CongratulationsDialog() {
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                       onClick={() => {
-                        completeStep(1);
+                        completeStep(2);
                         closeModal();
                       }}
                     >
