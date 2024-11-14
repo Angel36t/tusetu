@@ -4,8 +4,6 @@ import { Dialog, Transition } from "@headlessui/react";
 
 import React, { Fragment, useState } from "react";
 import { useCompositionContext } from "../../../../context/CompositionContext";
-// import { useCompositionContext } from "../../../context/CompositionContext";
-// import { useCompositionContext } from "../../../../context/CompositionContext";
 
 export default function CongratulationsDominant() {
   const [isOpen, setIsOpen] = useState(true);
