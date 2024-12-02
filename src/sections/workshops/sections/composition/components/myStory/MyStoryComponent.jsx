@@ -17,13 +17,12 @@ const mainValues = [
 const MyStoryComponent = () => {
   const [story, setStory] = useState("");
   const [usedValues, setUsedValues] = useState([]);
-  const [isSaved, setIsSaved] = useState(false); // Estado para determinar si se ha guardado
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleStoryChange = (e) => {
     const text = e.target.value;
     setStory(text);
 
-    // Detect values used in the story
     const detectedValues = mainValues.filter((value) =>
       new RegExp(`\\b${value}\\b`, "i").test(text)
     );
@@ -31,7 +30,7 @@ const MyStoryComponent = () => {
   };
 
   const handleSaveStory = () => {
-    setIsSaved(true); // Cambia el estado a "guardado"
+    setIsSaved(true);
   };
 
   const wordCount = story.trim().split(/\s+/).length;

@@ -1,40 +1,58 @@
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useValuesContext } from "../../../../context/ValuesContext";
 
 export const ConfirmationView = ({ confirmSelection }) => {
   const { selectedValues, setSelectedValues } = useValuesContext();
 
-  const resetSelection = () => setSelectedValues([]); // función para resetear selección
+  const isButtonDisabled = selectedValues.length !== 10;
+
+  // Handler para eliminar un valor
+  const handleRemoveValue = (indexToRemove) => {
+    const updatedValues = selectedValues.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setSelectedValues(updatedValues);
+  };
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 rounded-lg ">
-      <h3 className="text-2xl font-semibold text-center mb-4 text-gray-800">
-        Confirma tus valores principales
-      </h3>
-      <p className="text-center text-gray-600 mb-6">
-        Estos son los 10 valores que has seleccionado como más importantes para ti.
+    <div className="w-full mx-auto bg-white p-6 rounded-lg">
+      <p className="text-bl-100 font-bold text-center mb-6">
+        Resumen de valores
       </p>
-      <div className="flex flex-wrap justify-center gap-2 mb-8">
-        {selectedValues.map((value, index) => (
-          <div
-            key={index}
-            className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-lg shadow-sm font-medium text-sm"
-          >
-            <span className="mr-2">🌟</span> {value}
-          </div>
-        ))}
+      <div className="flex flex-wrap justify-center gap-1 mb-8">
+        {selectedValues.length === 0 ? (
+          <p className="text-gray-500 italic">No hay valores seleccionados</p>
+        ) : (
+          selectedValues.map((value, index) => (
+            <div
+              key={index}
+              className="flex items-center bg-blue-100 text-blue-700 px-2 py-1 rounded-md shadow-sm font-medium text-xs relative m-2"
+              style={{ maxWidth: "120px" }}
+            >
+              <span className="mr-1 text-sm">🌟</span>
+              {value}
+              <button
+                onClick={() => handleRemoveValue(index)}
+                className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white p-0.5 rounded-full hover:bg-red-600 transition-all"
+                style={{ width: "16px", height: "16px" }}
+              >
+                <XMarkIcon className="h-3 w-3" />
+              </button>
+            </div>
+          ))
+        )}
       </div>
       <div className="flex justify-center gap-6">
         <button
           onClick={confirmSelection}
-          className="px-5 py-2 bg-green-500 text-white font-semibold rounded-full hover:bg-green-600 transition-all duration-150 ease-in-out"
+          disabled={isButtonDisabled}
+          className={`px-5 py-2 font-semibold rounded-full transition-all duration-150 ease-in-out ${
+            isButtonDisabled
+              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              : "bg-green-500 text-white hover:bg-green-600"
+          }`}
         >
-          Sí, confirmar
-        </button>
-        <button
-          onClick={resetSelection}
-          className="px-5 py-2 bg-gray-300 text-gray-700 font-semibold rounded-full hover:bg-gray-400 transition-all duration-150 ease-in-out"
-        >
-          Modificar valores
+          Confirmar valores
         </button>
       </div>
     </div>

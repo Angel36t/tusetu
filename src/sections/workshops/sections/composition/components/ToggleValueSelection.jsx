@@ -29,16 +29,21 @@ const SelectValuesGrid = () => {
           />
         ) : (
           <>
-            <h2 className="text-2xl font-bold text-center mb-4">
+            <h2 className="text-2xl font-bold text-center text-bl-100">
               Selecciona tus valores
             </h2>
-            <p className="text-gray-500 text-center mb-6">
+            <p className="text-gray-500 text-center mb-2">
               Puedes seleccionar hasta 10 valores.
             </p>
             <SelectionView
               selectedValues={selectedValues}
               setSelectedValues={setSelectedValues}
               goToConfirmation={goToConfirmation}
+            />
+            <ConfirmationView
+              selectedValues={selectedValues}
+              resetSelection={resetSelection}
+              confirmSelection={confirmSelection}
             />
           </>
         )}

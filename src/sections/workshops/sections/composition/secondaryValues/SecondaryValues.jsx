@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import { valuesData } from "../config/valuesData";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+
 import CongratulationsSecondary from "./CongratulationsSecondary";
+import { DialogSecondaryValues } from "./DialogSecondaryValues";
 
 function ValuesComponent() {
   const mainValues = [
@@ -28,7 +28,7 @@ function ValuesComponent() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMainValue, setSelectedMainValue] = useState(null);
   const [selectedValues, setSelectedValues] = useState([]);
-  const [isSaved, setIsSaved] = useState(false); // Nuevo estado para el mensaje de confirmación
+  const [isSaved, setIsSaved] = useState(false);
 
   const allSelectedValues = Object.values(assignments).flat();
 
@@ -42,17 +42,6 @@ function ValuesComponent() {
     setIsOpen(false);
     setSelectedMainValue(null);
     setSelectedValues([]);
-  };
-
-  const handleCheckboxChange = (value) => {
-    setSelectedValues((prevSelectedValues) => {
-      if (prevSelectedValues.includes(value)) {
-        return prevSelectedValues.filter((item) => item !== value);
-      } else if (prevSelectedValues.length < 7) {
-        return [...prevSelectedValues, value];
-      }
-      return prevSelectedValues;
-    });
   };
 
   const handleSaveSelection = () => {
@@ -77,38 +66,46 @@ function ValuesComponent() {
     }));
   };
 
-  // Verificar si todos los valores principales tienen al menos un valor secundario
   const allMainValuesHaveSelections = mainValues.every(
     (main) => assignments[main].length > 0
   );
 
   const handleSaveAllAssignments = () => {
-    // Lógica de guardado adicional aquí si es necesario
-    setIsSaved(true); // Actualizamos el estado a true para mostrar el mensaje de confirmación
+    setIsSaved(true);
   };
 
   return (
     <div className="overflow-x-auto max-w-5xl mx-auto mt-8 px-4">
       {isSaved ? (
-    <CongratulationsSecondary/>
+        <CongratulationsSecondary />
       ) : (
         <>
-          <h2 className="text-2xl font-bold text-center mb-4">
+          <h2 className="text-2xl font-bold text-center mb-4 text-bl-100">
             Selecciona tus valores secundarios
           </h2>
           <p className="text-gray-500 text-center mb-6">
-            Puedes seleccionar hasta maximo 7 valores secundarios por cada valor principal.
+            Puedes seleccionar hasta máximo 7 valores secundarios por cada valor
+            principal.
           </p>
           <table className="w-full bg-white border border-gray-200 rounded-lg shadow-sm text-sm">
             <thead>
-              <tr className="bg-gray-100 text-gray-700 uppercase">
-                <th className="px-6 py-3 border-b text-left font-semibold text-sm">
+              <tr className="bg-bl-100 text-white uppercase">
+                <th
+                  className="px-6 py-3 border-b font-semibold text-sm text-center"
+                  style={{ width: "20%" }}
+                >
                   Valor Principal
                 </th>
-                <th className="px-6 py-3 border-b text-left font-semibold text-sm">
+                <th
+                  className="px-6 py-3 border-b font-semibold text-sm text-center"
+                  style={{ width: "70%" }}
+                >
                   Valores Secundarios
                 </th>
-                <th className="px-6 py-3 border-b text-left font-semibold text-sm">
+                <th
+                  className="px-6 py-3 border-b font-semibold text-sm text-center"
+                  style={{ width: "10%" }}
+                >
                   Acciones
                 </th>
               </tr>
@@ -119,10 +116,16 @@ function ValuesComponent() {
                   key={main}
                   className="hover:bg-gray-50 transition-colors duration-200"
                 >
-                  <td className="px-6 py-4 border-b text-gray-800 font-medium text-sm">
+                  <td
+                    className="px-6 py-4 border-b text-bl-100 font-bold text-sm text-center"
+                    style={{ width: "15%" }}
+                  >
                     {main}
                   </td>
-                  <td className="px-6 py-4 border-b text-gray-600">
+                  <td
+                    className="px-6 py-4 border-b text-gray-600 text-center"
+                    style={{ width: "70%" }}
+                  >
                     {assignments[main].length > 0 ? (
                       <div className="flex flex-wrap gap-2">
                         {assignments[main].map((value) => (
@@ -146,11 +149,14 @@ function ValuesComponent() {
                       </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 border-b text-sm">
-                    <div className="flex space-x-2">
+                  <td
+                    className="px-6 py-4 border-b text-sm"
+                    style={{ width: "15%" }}
+                  >
+                    <div className="flex space-x-2 justify-center">
                       <button
                         onClick={() => openDialog(main)}
-                        className="flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
+                        className="flex items-center justify-center w-8 h-8 bg-bl-100 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
                       >
                         <PencilIcon className="h-4 w-4" />
                       </button>
@@ -167,7 +173,6 @@ function ValuesComponent() {
             </tbody>
           </table>
 
-          {/* Mostrar el botón de Guardar Valores Secundarios solo si todos tienen al menos un valor */}
           {allMainValuesHaveSelections && (
             <div className="mt-6 flex justify-center">
               <button
@@ -179,64 +184,15 @@ function ValuesComponent() {
             </div>
           )}
 
-          {/* Dialog */}
-          <Dialog
-            open={isOpen}
-            onClose={closeDialog}
-            className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50"
-          >
-            <div className="bg-white rounded-lg max-w-7xl w-full mx-auto p-6">
-              <Dialog.Title className="text-lg font-bold mb-4">
-                Selecciona hasta 7 Valores Secundarios
-              </Dialog.Title>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-1">
-                {valuesData.map((value) => (
-                  <label
-                    key={value}
-                    className="flex items-center justify-start text-xs space-x-1 p-1"
-                    style={{ width: "100px", height: "30px" }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedValues.includes(value)}
-                      onChange={() => handleCheckboxChange(value)}
-                      disabled={
-                        allSelectedValues.includes(value) &&
-                        !selectedValues.includes(value)
-                      }
-                      className="form-checkbox h-3 w-3 text-blue-600"
-                    />
-                    <span
-                      className={`truncate ${
-                        allSelectedValues.includes(value) &&
-                        !selectedValues.includes(value)
-                          ? "text-gray-400"
-                          : ""
-                      }`}
-                    >
-                      {value}
-                    </span>
-                  </label>
-                ))}
-              </div>
-
-              <div className="mt-4 flex justify-end space-x-3">
-                <button
-                  onClick={closeDialog}
-                  className="px-4 py-2 bg-gray-300 rounded text-xs"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleSaveSelection}
-                  className="px-4 py-2 bg-blue-500 text-white rounded text-xs"
-                >
-                  Guardar
-                </button>
-              </div>
-            </div>
-          </Dialog>
+          <DialogSecondaryValues
+            isOpen={isOpen}
+            closeDialog={closeDialog}
+            mainValue={selectedMainValue}
+            values={selectedValues}
+            setValues={setSelectedValues}
+            allSelectedValues={allSelectedValues}
+            onSave={handleSaveSelection}
+          />
         </>
       )}
     </div>

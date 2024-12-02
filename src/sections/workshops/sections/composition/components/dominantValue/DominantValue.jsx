@@ -39,7 +39,7 @@ function DominantValue() {
 
   return (
     <div className="overflow-x-auto max-w-5xl mx-auto mt-8 px-4">
-      <h2 className="text-2xl font-bold text-center mb-4">
+      <h2 className="text-2xl font-bold text-center mb-4 text-bl-100">
         Identifica tu valor "Dominante"
       </h2>
       {!completed ? (
@@ -50,7 +50,7 @@ function DominantValue() {
           </p>
           <table className="w-full bg-white border border-gray-200 rounded-lg shadow-sm text-sm">
             <thead>
-              <tr className="bg-gray-100 text-gray-700 uppercase">
+              <tr className="bg-bl-100 text-white uppercase">
                 <th className="px-6 py-3 border-b text-left font-semibold text-sm">
                   Valor Principal
                 </th>

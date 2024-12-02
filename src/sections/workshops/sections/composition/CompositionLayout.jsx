@@ -10,34 +10,32 @@ import SecondaryValues from "./secondaryValues/SecondaryValues";
 import { CompositionContext } from "../../context/CompositionContext";
 import MyStoryComponent from "./components/myStory/MyStoryComponent";
 import DominantValue from "./components/dominantValue/DominantValue";
+import { SummaryValues } from "./components/summary/SummaryValues";
 
 // Definimos los componentes específicos para cada paso
-const StepOneComponent = () => <ToggleValueSelection />;
-const StepTwoComponent = () => <SecondaryValues />;
-const StepThreeComponent = () => (
-  <p>sin identificado.</p>
-);
-const StepFourComponent = () => (
-  <DominantValue />
-);
-const StepFiveComponent = () => <MyStoryComponent />;
+
+const SummaryValuesStep = () => <SummaryValues />;
+const ToggleValue = () => <ToggleValueSelection />;
+const SecondaryValuesStep = () => <SecondaryValues />;
+const DominantValueStep = () => <DominantValue />;
+const MyStory = () => <MyStoryComponent />;
 
 const stepsData = [
   {
     id: 1,
-    label: "Selecciona 10 valores principales",
+    label: "Explora y Analiza los Valores",
     icon: StarIcon,
     completed: false,
     status: "En progreso",
-    component: StepOneComponent,
+    component: SummaryValuesStep,
   },
   {
     id: 2,
-    label: "Liga valores secundarios",
+    label: "Selecciona 10 valores principales",
     icon: LinkIcon,
     completed: false,
     status: "Pendiente",
-    component: StepTwoComponent,
+    component: ToggleValue,
   },
   {
     id: 3,
@@ -45,7 +43,7 @@ const stepsData = [
     icon: DocumentTextIcon,
     completed: false,
     status: "Pendiente",
-    component: StepThreeComponent,
+    component: SecondaryValuesStep,
   },
   {
     id: 4,
@@ -53,7 +51,7 @@ const stepsData = [
     icon: DocumentTextIcon,
     completed: false,
     status: "Pendiente",
-    component: StepFourComponent,
+    component: DominantValueStep,
   },
   {
     id: 5,
@@ -61,7 +59,7 @@ const stepsData = [
     icon: DocumentTextIcon,
     completed: false,
     status: "Pendiente",
-    component: StepFiveComponent,
+    component: MyStory,
   },
 ];
 
@@ -95,7 +93,7 @@ export default function StepsImagesValidation() {
 
   return (
     <CompositionContext.Provider value={{ steps, completeStep }}>
-      <div className="flex flex-col lg:flex-row gap-6 h-screen">
+      <div className="flex flex-col lg:flex-row gap-6 h-screen bg-white rounded-lg shadow-lg border border-gray-200 pl-4">
         {/* Stepper Vertical */}
         <div className="flex flex-col items-start w-full lg:w-[20%] justify-center">
           {steps.map((step, index) => (
@@ -114,7 +112,7 @@ export default function StepsImagesValidation() {
         </div>
 
         {/* Panel de Contenido */}
-        <div className="w-full lg:w-[80%] p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+        <div className="w-full lg:w-[80%] p-6 ">
           {activeStep && <activeStep.component />}
         </div>
       </div>

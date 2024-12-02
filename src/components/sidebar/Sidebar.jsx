@@ -10,36 +10,59 @@ function Sidebar() {
     { path: "/talleres", label: "Talleres", icon: <FiTool /> },
   ];
 
+  const user = {
+    name: "Angel Bastian",
+    email: "arbt18@gmail.com",
+    avatar: "https://fanky.cl/wp-content/uploads/2024/01/Dread-Mar-I.jpg",
+  };
+
   return (
-    <div className="w-[200px] min-w-[200px] min-h-[95vh] max-h-[95vh] sm:max-h-[600px] m-4 rounded-[14px] bg-white p-4 flex flex-col justify-start items-center shadow-lg">
-      <div className="text-center mb-8">
-        <div className="flex justify-center mb-6">
-          <img src="/assets/login/logo.png" alt="Logo" className="w-16 h-14" />
+    <div className="w-[250px] min-w-[250px] min-h-[100vh] bg-white shadow-lg flex flex-col">
+      <div className="p-6 text-center border-b">
+        <div className="flex justify-center mb-4">
+          <img
+            src="/assets/login/logo.png"
+            alt="Logo"
+            className="w-16 h-16 object-contain"
+          />
         </div>
-        <h2 className="text-[#05C7F2] m-b text-lg text-fs-13 ">ALEXANDER ASSAD</h2>
+        <h2 className="text-[#05C7F2] text-lg font-semibold">
+          ALEXANDER ASSAD
+        </h2>
       </div>
 
-      <ul className="space-y-4 w-full">
+      <ul className="flex-1 space-y-2 p-4">
         {menuOptions.map((option, index) => (
-          <li key={index} className="flex items-center justify-center text-fs-14 m-m">
+          <li key={index}>
             <Link
               to={option.path}
-              className={`flex items-center p-2 w-full rounded ${
-                location.pathname === option.path
-                  ? "text-blue-500 bg-blue-100"
-                  : "text-gray-700 hover:bg-gray-200"
+              className={`flex items-center p-3 rounded-lg transition-all ${
+                location.pathname.startsWith(option.path)
+                  ? "bg-blue-100 text-blue-500"
+                  : "text-gray-700 hover:bg-gray-100"
               }`}
             >
-              {option.icon}
-              <span className="ml-2">{option.label}</span>
+              <span className="text-xl">{option.icon}</span>
+              <span className="ml-3 text-sm font-medium">{option.label}</span>
             </Link>
           </li>
         ))}
       </ul>
 
-      <div className="mt-auto w-full flex items-center justify-center">
-        <button className="flex items-center p-2 text-gray-500 hover:text-gray-700">
-          <FiLogOut className="mr-2" />
+      <div className="p-4 border-t mb-12">
+        <div className="flex items-center space-x-3">
+          <img
+            src={user.avatar}
+            alt="Avatar"
+            className="w-12 h-12 rounded-full object-cover"
+          />
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900">{user.name}</h3>
+            <p className="text-xs text-gray-500">{user.email}</p>
+          </div>
+        </div>
+        <button className="mt-4 w-full flex items-center justify-center p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all">
+          <FiLogOut className="mr-2 text-lg" />
           <span>Logout</span>
         </button>
       </div>

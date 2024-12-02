@@ -2,7 +2,7 @@ import { useState } from "react";
 import { valuesData } from "../../config/valuesData";
 import { useValuesContext } from "../../../../context/ValuesContext";
 
-const ITEMS_PER_PAGE = 72;
+const ITEMS_PER_PAGE = 48;
 const values = valuesData;
 
 export const SelectionView = ({ goToConfirmation }) => {
@@ -25,7 +25,7 @@ export const SelectionView = ({ goToConfirmation }) => {
 
   return (
     <div className="max-w-screen-lg mx-auto p-4 bg-white rounded-lg ">
-      <p className="text-lg font-semibold text-blue-700 text-center mb-4">
+      <p className="text-lg font-semibold text-bl-100 text-center mb-4">
         Seleccionados: {selectedValues.length} / 10
       </p>
 
@@ -33,7 +33,7 @@ export const SelectionView = ({ goToConfirmation }) => {
         <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-400 transition-colors"
+          className="px-4 py-2 bg-bl-100 text-white rounded-lg disabled:opacity-50 hover:bg-gray-400 transition-colors"
         >
           Anterior
         </button>
@@ -41,7 +41,7 @@ export const SelectionView = ({ goToConfirmation }) => {
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-400 transition-colors"
+          className="px-4 py-2 bg-bl-100 text-white rounded-lg disabled:opacity-50 hover:bg-bl- transition-colors"
         >
           Siguiente
         </button>
@@ -54,8 +54,8 @@ export const SelectionView = ({ goToConfirmation }) => {
             onClick={() => toggleValueSelection(value)}
             className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors truncate ${
               selectedValues.includes(value)
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-200 text-gray-700 hover:bg-blue-100"
+                ? "bg-bl-100 text-white hover:bg-blue-700"
+                : "bg-white shadow-2xl border hover:bg-blue-100"
             }`}
             disabled={
               selectedValues.length === 10 && !selectedValues.includes(value)
@@ -65,17 +65,6 @@ export const SelectionView = ({ goToConfirmation }) => {
           </button>
         ))}
       </div>
-
-      {selectedValues.length === 10 && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={goToConfirmation}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Confirmar Selección
-          </button>
-        </div>
-      )}
     </div>
   );
 };
