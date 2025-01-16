@@ -1,100 +1,49 @@
-import { useEffect, useRef } from 'react';
-import anime from 'animejs';
-
 export default function HeroesTwo() {
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            anime({
-              targets: '.hero-title',
-              translateX: [-100, 0],
-              opacity: [0, 1],
-              duration: 1500,
-              easing: 'easeOutExpo',
-              delay: 500,
-            });
-
-            anime({
-              targets: '.hero-paragraph',
-              translateY: [50, 0],
-              opacity: [0, 1],
-              duration: 1500,
-              easing: 'easeOutExpo',
-              delay: 1000,
-              complete: () => {
-                document.querySelector('.hero-paragraph').style.transform = 'none';
-              },
-            });
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
   return (
-    <div id="inicio" ref={sectionRef} className="bg-white pt-24">
-      <div className="relative">
-        <div className="mx-auto max-w-7xl">
-          <div className="relative z-10 pt-14 lg:w-full lg:max-w-2xl">
-            <svg
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-              className="absolute inset-y-0 right-8 hidden h-full w-80 translate-x-1/2 transform fill-white lg:block"
-            >
-              <polygon points="0,0 90,0 50,100 0,100" />
-            </svg>
+    <div className="relative overflow-hidden text-white h-[88vh]">
+      {/* Imagen para escritorio */}
+      <img
+        alt="Fondo decorativo para escritorio"
+        src="/banners/home/fade-effect.jpg"
+        className="absolute top-0 left-0 -z-10 w-full h-full object-cover hidden sm:block"
+      />
 
-            <div className="relative px-6 py-32 sm:py-40 lg:px-8 lg:py-56 lg:pr-0">
-              <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
-                <h1 className="hero-title text-pretty text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
-                  Conviértete en el Líder de tu Vida
-                </h1>
-                <p
-                  className="hero-paragraph mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8"
-                  style={{ willChange: 'transform, opacity' }}
-                >
-                  Descubre cómo alinear tus acciones con tus valores para vivir
-                  con autenticidad y alcanzar tu máximo potencial. Empieza tu
-                  transformación hoy.{" "}
-                </p>
-                <div className="mt-10 flex items-center gap-x-6">
-                  <a
-                    href="#"
-                    className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    Prueba la demo gratis
-                  </a>
-                  <a href="#" className="text-sm/6 font-semibold text-gray-900">
-                    Aprende más sobre el curso <span aria-hidden="true">→</span>
-                  </a>
-                </div>
-              </div>
-            </div>
+      {/* Imagen para móvil */}
+      <img
+        alt="Fondo decorativo para móvil"
+        src="/banners/barco.jpg"
+        className="absolute top-0 left-0 -z-10 w-full h-full object-cover block sm:hidden brightness-50"
+      />
+
+      <div className="container mx-auto px-6 lg:px-8">
+        <div data-aos="fade-right" className="max-w-2xl py-20 sm:py-10">
+          <div className="text-left pl-6 sm:pl-10 md:pl-24">
+            {/* <h1 className="text-lg m-b tracking-tight sm:text-4xl md:text-5xl">
+              Tu puente hacia el comercio internacional, fácil y rápido
+            </h1> */}
+            {/* <p className="mt-4 text-sm text-gray-400 sm:mt-8 sm:text-base m-m">
+              Gestionamos cada detalle de tus importaciones y exportaciones,
+              desde el origen hasta el destino.
+            </p>
+            <div className="mt-6 flex items-center space-x-4 sm:mt-10">
+              <a href="#" className="text-sm m-s-b">
+                Descubre nuestras soluciones <span aria-hidden="true">→</span>
+              </a>
+            </div> */}
           </div>
         </div>
-        <div className="bg-gray-50 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-          <img
-            alt=""
-            src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/bFllqMEvukCHcMhpPWWR/media/667ffee68145f80fb7db413f.png"
-            className="aspect-[3/2] object-cover lg:aspect-auto lg:size-full"
-          />
-        </div>
+      </div>
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+      >
+        <div
+          className="relative left-1/2 aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-pink-400 to-indigo-400 opacity-30 sm:w-[72.1875rem]"
+          style={{
+            clipPath:
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+          }}
+        />
       </div>
     </div>
   );

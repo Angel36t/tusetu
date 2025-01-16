@@ -1,12 +1,48 @@
+import axios from "axios";
+import { useContext } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+
+import { postMainValues, updateProgress } from "../../api/api";
+import { useUser } from "../../../../../../context/UserContext";
 import { useValuesContext } from "../../../../context/ValuesContext";
+import { CompositionContext } from "../../../../context/CompositionContext";
 
 export const ConfirmationView = ({ confirmSelection }) => {
+  const { user } = useUser();
+  const { progressData } = useContext(CompositionContext);
   const { selectedValues, setSelectedValues } = useValuesContext();
-
+  
   const isButtonDisabled = selectedValues.length !== 10;
+  
+  const submitValues = async () => {
+    const payload = {
+      user_id: user.id,
+      main_values: selectedValues.map((value) => ({ name: value })),
+    };
 
-  // Handler para eliminar un valor
+    try {
+      await postMainValues(payload);
+
+      const updatedProgress = {
+        ...progressData,
+        levels: progressData.levels.map((level) =>
+          level.level === 2
+            ? { ...level, completed: true, percentage: 20 }
+            : level
+        ),
+      };
+
+      await updateProgress(9, updatedProgress);
+
+      confirmSelection();
+    } catch (error) {
+      console.error(
+        "Error al enviar los valores o actualizar el progreso:",
+        error
+      );
+    }
+  };
+
   const handleRemoveValue = (indexToRemove) => {
     const updatedValues = selectedValues.filter(
       (_, index) => index !== indexToRemove
@@ -44,7 +80,9 @@ export const ConfirmationView = ({ confirmSelection }) => {
       </div>
       <div className="flex justify-center gap-6">
         <button
-          onClick={confirmSelection}
+          onClick={() => {
+            submitValues();
+          }}
           disabled={isButtonDisabled}
           className={`px-5 py-2 font-semibold rounded-full transition-all duration-150 ease-in-out ${
             isButtonDisabled

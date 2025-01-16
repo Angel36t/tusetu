@@ -1,9 +1,7 @@
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import { Dialog, Transition } from "@headlessui/react";
-
 import React, { Fragment, useState } from "react";
-import { useCompositionContext } from "../../../../context/CompositionContext";
+import { Dialog, Transition } from "@headlessui/react";
 
 export default function CongratulationsDominant() {
   const [isOpen, setIsOpen] = useState(true);
@@ -12,8 +10,6 @@ export default function CongratulationsDominant() {
   function closeModal() {
     setIsOpen(false);
   }
-
-  const { completeStep } = useCompositionContext();
 
   return (
     <>
@@ -70,7 +66,7 @@ export default function CongratulationsDominant() {
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                       onClick={() => {
-                        completeStep(4);
+                        // completeStep(4);
                         closeModal();
                       }}
                     >

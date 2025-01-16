@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { WorkshopCard } from "./Workshops";
 import BadgeList from "./BadgeList";
+import { WorkshopCard } from "./Workshops";
+import { useUser } from "../../context/UserContext";
 
 export default function WelcomeLayout() {
-  const userName = "Angel Bastian";
+  const { user } = useUser();
 
   const motivationalQuotes = [
     {
@@ -82,7 +83,7 @@ export default function WelcomeLayout() {
       <div className="absolute top-8 left-8 flex flex-col gap-2">
         <div className="flex items-center gap-4">
           <h1 className="text-4xl font-bold text-gray-800">
-            Hola, <span className="text-blue-500">{userName}!</span>
+            Hola, <span className="text-blue-500">{user?.name}!</span>
           </h1>
           <img
             src="/assets/badges/gold-medal.png"
@@ -98,7 +99,7 @@ export default function WelcomeLayout() {
       </div>
 
       <WorkshopCard />
-      <BadgeList/>
+      <BadgeList />
     </div>
   );
 }

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import CongratulationsMyStory from "./CongratulationsMyStory";
+import DragAndDropTable from "./TableValuesStory";
+// import DragAndDropTable from "./TableValuesStory";
+// import TableValuesStory from "./TableValuesStory";
 
 const mainValues = [
   "Abundancia",
@@ -44,6 +47,8 @@ const MyStoryComponent = () => {
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
         Escribe tu historia
       </h1>
+
+      <DragAndDropTable />
 
       {/* Display Used Values */}
       <div className="flex flex-wrap justify-center gap-2 mb-8">

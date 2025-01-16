@@ -1,5 +1,5 @@
-import anime from 'animejs';
-import { useEffect } from 'react';
+import anime from "animejs";
+import { useEffect } from "react";
 import { PlusIcon } from "@heroicons/react/16/solid";
 
 const tiers = [
@@ -33,7 +33,8 @@ const tiers = [
   },
   {
     name: "Transformador",
-    description: "Máxima flexibilidad y soporte para una transformación completa.",
+    description:
+      "Máxima flexibilidad y soporte para una transformación completa.",
     priceMonthly: "$99",
     href: "#",
     highlights: [
@@ -58,7 +59,7 @@ export default function PriceComparison() {
               opacity: [0, 1],
               translateY: [-50, 0],
               duration: 1000,
-              easing: 'easeOutExpo',
+              easing: "easeOutExpo",
             });
           }
         });
@@ -66,56 +67,63 @@ export default function PriceComparison() {
       { threshold: 0.2 } // Umbral del 20%, empieza la animación cuando el 20% del elemento sea visible
     );
 
-    document.querySelectorAll('.price-card').forEach((card) => {
+    document.querySelectorAll(".price-card").forEach((card) => {
       observer.observe(card);
     });
 
-    document.querySelectorAll('.trial-button').forEach((button) => {
-      button.addEventListener('mouseenter', () => {
+    document.querySelectorAll(".trial-button").forEach((button) => {
+      button.addEventListener("mouseenter", () => {
         anime({
           targets: button,
           scale: 1.05,
           duration: 300,
-          easing: 'easeOutQuad',
+          easing: "easeOutQuad",
         });
       });
 
-      button.addEventListener('mouseleave', () => {
+      button.addEventListener("mouseleave", () => {
         anime({
           targets: button,
           scale: 1,
           duration: 300,
-          easing: 'easeOutQuad',
+          easing: "easeOutQuad",
         });
       });
     });
 
     return () => {
-      document.querySelectorAll('.price-card').forEach((card) => {
+      document.querySelectorAll(".price-card").forEach((card) => {
         observer.unobserve(card);
       });
 
-      document.querySelectorAll('.trial-button').forEach((button) => {
-        button.removeEventListener('mouseenter', () => {});
-        button.removeEventListener('mouseleave', () => {});
+      document.querySelectorAll(".trial-button").forEach((button) => {
+        button.removeEventListener("mouseenter", () => {});
+        button.removeEventListener("mouseleave", () => {});
       });
     };
   }, []);
 
   return (
-    <div className="bg-white py-24 sm:py-32">
+    <div
+      className="bg-white py-24 sm:py-32"
+      style={{
+        backgroundImage: "url(/bg/bg-price.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="mx-auto max-w-4xl px-6 max-lg:text-center lg:max-w-7xl lg:px-8">
-        <h1 className="text-balance text-5xl font-semibold tracking-tight text-gray-950 sm:text-6xl lg:text-pretty">
+        <h1 className="text-balance text-5xl p-m text-white tracking-tight text-center sm:text-6xl lg:text-pretty">
           Precios que se adaptan a tu camino de transformación
         </h1>
-        <p className="mt-6 max-w-2xl text-pretty text-lg font-medium text-gray-600 max-lg:mx-auto sm:text-xl/8">
+        <p className="m-14  m-m text-center text-white">
           Elige el plan que mejor se adapte a tus necesidades. Todos los planes
           están diseñados para acompañarte en cada paso de tu viaje personal
           hacia el crecimiento y el autoconocimiento.
         </p>
       </div>
       <div className="relative pt-16 sm:pt-24">
-        <div className="absolute inset-x-0 bottom-0 top-48 bg-[radial-gradient(circle_at_center_var(--gradient-position),#7775D6,#592E71,#030712_70%)] [--gradient-position:center] lg:[--gradient-position:150%]" />
+        <div className="absolute inset-x-0 bottom-0 top-48 " />
         <div className="relative mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
             {tiers.map((tier, index) => (
@@ -179,8 +187,7 @@ export default function PriceComparison() {
               </div>
             ))}
           </div>
-          <div className="flex justify-between py-16 opacity-60 max-sm:mx-auto max-sm:max-w-md max-sm:flex-wrap max-sm:justify-evenly max-sm:gap-x-4 max-sm:gap-y-4 sm:py-24">
-          </div>
+          <div className="flex justify-between py-16 opacity-60 max-sm:mx-auto max-sm:max-w-md max-sm:flex-wrap max-sm:justify-evenly max-sm:gap-x-4 max-sm:gap-y-4 sm:py-24"></div>
         </div>
       </div>
     </div>

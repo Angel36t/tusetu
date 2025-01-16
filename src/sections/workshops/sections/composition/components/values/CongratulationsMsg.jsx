@@ -2,8 +2,8 @@ import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import { Dialog, Transition } from "@headlessui/react";
 
-import React, { Fragment, useState } from "react";
-import { useCompositionContext } from "../../../../context/CompositionContext";
+import React, { Fragment, useContext, useState } from "react";
+import { CompositionContext } from "../../../../context/CompositionContext";
 
 export default function CongratulationsDialog() {
   const [isOpen, setIsOpen] = useState(true);
@@ -13,7 +13,14 @@ export default function CongratulationsDialog() {
     setIsOpen(false);
   }
 
-  const { completeStep } = useCompositionContext();
+  const { steps, setActiveStep } = useContext(CompositionContext);
+
+  const goToStep = (stepId) => {
+    const selectedStep = steps.find((step) => step.id === stepId);
+    if (selectedStep) {
+      setActiveStep(selectedStep);
+    }
+  };
 
   return (
     <>
@@ -70,7 +77,7 @@ export default function CongratulationsDialog() {
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                       onClick={() => {
-                        completeStep(1);
+                        goToStep(3);
                         closeModal();
                       }}
                     >

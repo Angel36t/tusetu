@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useUser } from "../../context/UserContext";
@@ -9,45 +9,21 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const { setUser } = useUser();
-
-  // Función para autenticar al usuario
-  const authenticateUser = (email, password) => {
-    return email === "arbt18@gmail.com" && password === "Bata990818";
-  };
-
-  useEffect(() => {
-    const authData = localStorage.getItem("authData");
-    if (authData) {
-      const { email, password } = JSON.parse(authData);
-      if (authenticateUser(email, password)) {
-        const userInfo = { email };
-        setUser(userInfo);
-        navigate("/inicio");
-      }
-    }
-  }, [setUser, navigate]);
+  const { login } = useUser();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (authenticateUser(email, password)) {
-      const userInfo = { email };
-      setUser(userInfo);
-
-      if (rememberMe) {
-        localStorage.setItem("authData", JSON.stringify({ email, password }));
-      } else {
-        localStorage.removeItem("authData");
-      }
-
-      const redirectPath = location.state?.from?.pathname || "/inicio";
-      navigate(redirectPath);
+  
+    const userInfo = await login(email, password, rememberMe);
+    if (userInfo) {
+      const redirectPath = location.state?.from?.pathname || "/inicio"; // Si no hay una página previa, redirige a /inicio
+      navigate(redirectPath, { replace: true });
     } else {
       console.error("Credenciales incorrectas");
     }
   };
   
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-[#f7f9fa]">
       <div

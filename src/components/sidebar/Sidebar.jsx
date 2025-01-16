@@ -1,20 +1,16 @@
 import { Link, useLocation } from "react-router-dom";
 import { FiGrid, FiUsers, FiLogOut, FiTool } from "react-icons/fi";
+import { useUser } from "../../context/UserContext";
 
 function Sidebar() {
   const location = useLocation();
+  const { user, logout } = useUser();
 
   const menuOptions = [
     { path: "/inicio", label: "Dashboard", icon: <FiGrid /> },
     { path: "/usuarios", label: "Usuarios", icon: <FiUsers /> },
     { path: "/talleres", label: "Talleres", icon: <FiTool /> },
   ];
-
-  const user = {
-    name: "Angel Bastian",
-    email: "arbt18@gmail.com",
-    avatar: "https://fanky.cl/wp-content/uploads/2024/01/Dread-Mar-I.jpg",
-  };
 
   return (
     <div className="w-[250px] min-w-[250px] min-h-[100vh] bg-white shadow-lg flex flex-col">
@@ -52,16 +48,23 @@ function Sidebar() {
       <div className="p-4 border-t mb-12">
         <div className="flex items-center space-x-3">
           <img
-            src={user.avatar}
+            src={user?.avatar || "https://via.placeholder.com/150"}
             alt="Avatar"
             className="w-12 h-12 rounded-full object-cover"
           />
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">{user.name}</h3>
-            <p className="text-xs text-gray-500">{user.email}</p>
+            <h3 className="text-sm font-semibold text-gray-900">
+              {user?.name || "Usuario"}
+            </h3>
+            <p className="text-xs text-gray-500">
+              {user?.email || "email@example.com"}
+            </p>
           </div>
         </div>
-        <button className="mt-4 w-full flex items-center justify-center p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all">
+        <button
+          onClick={logout}
+          className="mt-4 w-full flex items-center justify-center p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all"
+        >
           <FiLogOut className="mr-2 text-lg" />
           <span>Logout</span>
         </button>

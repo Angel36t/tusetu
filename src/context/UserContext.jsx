@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { loginService } from "../api/api";
 
 const UserContext = createContext();
 
@@ -8,48 +9,55 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Función para autenticar usando `authData`
-  const validateAuthData = (authData) => {
-    const validEmail = "arbt18@gmail.com";
-    const validPassword = "Bata990818";
-    return (
-      authData.email === validEmail && authData.password === validPassword
-    );
+  const login = async (email, password, rememberMe) => {
+    try {
+      const {id, user_name, position } = await loginService(
+        email,
+        password
+      );
+      
+      const userInfo = {email, name: user_name, position, id };
+
+      localStorage.setItem("authData", JSON.stringify({id, email, password, position }));
+
+      setUser(userInfo);
+      return userInfo;
+    } catch (error) {
+      console.error(
+        "Error al iniciar sesión:",
+        error.response?.data || error.message
+      );
+      return null;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("authData");
+    setUser(null);
   };
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    const checkAuthData = async () => {
       const storedAuthData = localStorage.getItem("authData");
-
       if (storedAuthData) {
-        const authData = JSON.parse(storedAuthData);
-        if (validateAuthData(authData)) {
-          // Si la validación es correcta, configura el usuario
-          setUser({ email: authData.email });
+        const { email, password } = JSON.parse(storedAuthData);
+        const userInfo = await login(email, password, true);
+        if (userInfo) {
+          setUser(userInfo);
         }
       }
       setLoading(false);
-    }, 800);
+    };
 
-    return () => clearTimeout(timeoutId);
+    checkAuthData();
   }, []);
-
-  // Función para actualizar el usuario y `authData` en localStorage
-  const handleSetUser = (userInfo) => {
-    if (userInfo) {
-      const authData = { email: userInfo.email, password: userInfo.password };
-      localStorage.setItem("authData", JSON.stringify(authData));
-    } else {
-      localStorage.removeItem("authData");
-    }
-    setUser(userInfo);
-  };
 
   return (
     <UserContext.Provider
       value={{
         user,
-        setUser: handleSetUser, // usa handleSetUser para actualizar y sincronizar en localStorage
+        login,
+        logout,
         loading,
       }}
     >

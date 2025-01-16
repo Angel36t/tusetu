@@ -1,14 +1,19 @@
-import { useState } from "react";
-import { valuesData } from "../../config/valuesData";
+import { useEffect, useState } from "react";
+
+import { getRecords, getUserMainValues } from "../../api/api";
+import { useUser } from "../../../../../../context/UserContext";
 import { useValuesContext } from "../../../../context/ValuesContext";
 
 const ITEMS_PER_PAGE = 48;
-const values = valuesData;
 
-export const SelectionView = ({ goToConfirmation }) => {
-  const { selectedValues, toggleValueSelection } = useValuesContext();
+export const SelectionView = () => {
+  const { selectedValues, setSelectedValues, toggleValueSelection } = useValuesContext();
+  const [values, setValues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null);
   const totalPages = Math.ceil(values.length / ITEMS_PER_PAGE);
+  const { user } = useUser();
+
 
   const getPageValues = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -23,8 +28,29 @@ export const SelectionView = ({ goToConfirmation }) => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  useEffect(() => {
+    const fetchValues = async () => {
+      try {
+        const records = await getRecords();
+        const recordValues = records.records.map((record) => record.value);
+        setValues(recordValues);
+
+        const userId = user.id;
+        const userValues = await getUserMainValues(userId);
+        const selectedNames = userValues.map((item) => item.name);
+        setSelectedValues(selectedNames);
+      } catch (err) {
+        setError("Error loading data. Please try again later.");
+        console.error(err);
+      }
+    };
+
+    fetchValues();
+  }, [setSelectedValues]);
+
   return (
-    <div className="max-w-screen-lg mx-auto p-4 bg-white rounded-lg ">
+    <div className="max-w-screen-lg mx-auto p-4 bg-white rounded-lg">
+      {error && <p className="text-red-500 text-center">{error}</p>}
       <p className="text-lg font-semibold text-bl-100 text-center mb-4">
         Seleccionados: {selectedValues.length} / 10
       </p>

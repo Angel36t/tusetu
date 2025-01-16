@@ -21,8 +21,8 @@ export default function HomeLayout() {
       {/* <HeroesBackground /> */}
       <WhoAmI />
       <PriceComparison />
-      <Methodology />
       <Testimonials />
+      <Methodology />
       <MyPurpose />
       <Teachers />
       <ContactUs />

@@ -1,27 +1,19 @@
 [
     {
       "id": 1,
-      "title": "Composicion",
+      "title": "Vibracion",
       "instructor": "Alexander Assad",
       "progress": "50/100",
       "image": "https://eresmama.com/wp-content/uploads/2019/06/companerismo-trabajo-en-equipo-valores-en-la-escuela.jpg",
-      "link": "/talleres/composicion"
+      "link": "/talleres/vibracion"
     },
     {
       "id": 2,
-      "title": "Vibracion",
+      "title": "Composicion",
       "instructor": "Alexander Assad",
       "progress": "75/100",
       "image": "https://media.gq.com.mx/photos/5dc5a466e33c9600085c8b30/16:9/w_2560%2Cc_limit/GettyImages-604619026.jpg",
       "link": "/workshops/manual-vida"
-    },
-    {
-      "id": 3,
-      "title": "Creacion",
-      "instructor": "Alex Martínez",
-      "progress": "20/100",
-      "image": "https://cdn-3.expansion.mx/dims4/default/8c2a9a7/2147483647/strip/true/crop/624x351+0+0/resize/1200x675!/format/webp/quality/60/?url=https%3A%2F%2Fcherry-brightspot.s3.amazonaws.com%2Fmedia%2F2010%2F03%2F18%2Fmeditar-meditacion.jpg",
-      "link": "/workshops/fotografia-creativa"
     }
   ]
   

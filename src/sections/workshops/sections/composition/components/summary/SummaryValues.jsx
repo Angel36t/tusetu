@@ -1,14 +1,38 @@
-import { useState, useEffect } from "react";
-import { valuesData } from "../../config/valuesData";
+import { useState, useEffect, useContext } from "react";
 import { ClockIcon } from "@heroicons/react/24/outline";
 
+import { getRecords } from "../../api/api";
+import { CompositionContext } from "../../../../context/CompositionContext";
+
 const ITEMS_PER_PAGE = 72;
-const values = valuesData;
 
 export const SummaryValues = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [values, setValues] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState(300);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { setRecords } = useContext(CompositionContext);
+
   const totalPages = Math.ceil(values.length / ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    const fetchValues = async () => {
+      try {
+        setLoading(true);
+        const response = await getRecords();
+        const records = response.records.map((record) => record.value);
+        setRecords(records);
+        
+        setValues(records);
+      } catch (err) {
+        setError("Error loading data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchValues();
+  }, []);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -40,8 +64,16 @@ export const SummaryValues = () => {
     setCurrentPage(page);
   };
 
+  if (loading) {
+    return <div className="text-center">Cargando datos...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">{error}</div>;
+  }
+
   return (
-    <div className="max-w-screen-lg mx-auto p-6  rounded-lg border-gray-200">
+    <div className="max-w-screen-lg mx-auto p-6 rounded-lg border-gray-200">
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-bold text-bl-100">
           ¡Explora y Analiza los Valores!

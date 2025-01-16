@@ -9,7 +9,7 @@ export const PhatRoutings = () => {
     { path: "/inicio", component: WelcomeLayout, allowedRoles: ["admin"] },
     { path: "/talleres", component: WorkshopsLayout, allowedRoles: ["admin"] },
     { path: "/usuarios", component: UsersLayout, allowedRoles: ["admin"] },
-    { path: "/talleres/composicion", component: CompositionLayout, allowedRoles: ["admin"] },
+    { path: "/talleres/vibracion", component: CompositionLayout, allowedRoles: ["admin"] },
   ];
 
   return establishedRoutes;

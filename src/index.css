@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -21,4 +22,11 @@ body {
 .m-m {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
+}
+
+
+.p-m {
+  font-family: "Permanent Marker", serif;
+  font-weight: 400;
+  font-style: normal;
 }

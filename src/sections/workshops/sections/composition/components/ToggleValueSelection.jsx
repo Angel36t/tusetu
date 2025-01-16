@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { ConfirmationView } from "./values/ConfirmationView";
+
 import { SelectionView } from "./values/SelectionView";
+import { ConfirmationView } from "./values/ConfirmationView";
 import CongratulationsMsg from "./values/CongratulationsMsg";
 import { ValuesProvider } from "../../../context/ValuesContext";
 
