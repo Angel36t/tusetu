@@ -1,45 +1,103 @@
-import React, { useState } from "react";
-import CongratulationsMyStory from "./CongratulationsMyStory";
-import DragAndDropTable from "./TableValuesStory";
-// import DragAndDropTable from "./TableValuesStory";
-// import TableValuesStory from "./TableValuesStory";
+import { useEffect, useState } from "react";
 
-const mainValues = [
-  "Abundancia",
-  "Audacia",
-  "Aventura",
-  "Balance",
-  "Bondad",
-  "Calidad",
-  "Calma",
-  "Conciencia",
-  "Contribución",
-  "Dedicación",
-];
+import { getLifeHistory, getUserMainValues, saveLifeHistory } from "../../api/api";
+import CongratulationsMyStory from "./CongratulationsMyStory";
+import { useUser } from "../../../../../../context/UserContext";
 
 const MyStoryComponent = () => {
   const [story, setStory] = useState("");
   const [usedValues, setUsedValues] = useState([]);
-  const [isSaved, setIsSaved] = useState(false);
+  const [mainValues, setMainValues] = useState([]);
+  const [isComplete, setIsComplete] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [showCongratulations, setShowCongratulations] = useState(false);
 
-  const handleStoryChange = (e) => {
-    const text = e.target.value;
-    setStory(text);
+  const { user } = useUser();
+  const userId = user.id;
 
-    const detectedValues = mainValues.filter((value) =>
-      new RegExp(`\\b${value}\\b`, "i").test(text)
+  // Normaliza una cadena eliminando acentos y convirtiendo a minúsculas
+  const normalizeText = (text) =>
+    text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+  const detectUsedValues = (text, values) => {
+    const normalizedText = normalizeText(text);
+    const detectedValues = values.filter((value) =>
+      new RegExp(`\\b${normalizeText(value)}\\b`, "i").test(normalizedText)
     );
     setUsedValues(detectedValues);
   };
 
-  const handleSaveStory = () => {
-    setIsSaved(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch user's main values
+        const mainValuesData = await getUserMainValues(userId);
+        const normalizedValues = mainValuesData.map((value) => value.name);
+        setMainValues(normalizedValues);
+
+        // Fetch user's life story
+        const lifeHistoryData = await getLifeHistory(userId);
+        if (lifeHistoryData.success) {
+          const savedStory = lifeHistoryData.data.text || "";
+          setStory(savedStory);
+
+          // Detect used values after fetching both main values and story
+          detectUsedValues(savedStory, normalizedValues);
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+  const handleStoryChange = (e) => {
+    const text = e.target.value;
+    setStory(text);
+    detectUsedValues(text, mainValues); // Detect values as the user types
+  };
+
+  const handleSaveStory = async () => {
+    try {
+      const payload = {
+        id_user: userId,
+        text: story,
+      };
+
+      await saveLifeHistory(payload);
+
+      const allValuesUsed = mainValues.every((value) =>
+        usedValues.includes(value)
+      );
+
+      setIsComplete(allValuesUsed);
+
+      if (allValuesUsed) {
+        setShowCongratulations(true);
+      } else {
+        alert("Avance guardado, pero faltan valores por incluir.");
+      }
+    } catch (error) {
+      console.error("Error saving story:", error);
+    }
   };
 
   const wordCount = story.trim().split(/\s+/).length;
 
-  if (isSaved) {
-    return <CongratulationsMyStory />;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-600 text-lg">Cargando datos...</p>
+      </div>
+    );
   }
 
   return (
@@ -48,7 +106,12 @@ const MyStoryComponent = () => {
         Escribe tu historia
       </h1>
 
-      <DragAndDropTable />
+      {/* Congratulations Message */}
+      {showCongratulations && (
+        <div className="mb-6">
+          <CongratulationsMyStory />
+        </div>
+      )}
 
       {/* Display Used Values */}
       <div className="flex flex-wrap justify-center gap-2 mb-8">
@@ -98,6 +161,13 @@ const MyStoryComponent = () => {
           Guardar historia
         </button>
       </div>
+
+      {/* Show "Advance saved" message */}
+      {!isComplete && showCongratulations && (
+        <div className="text-center text-yellow-600 font-medium mt-4">
+          Avance guardado, pero faltan valores por incluir.
+        </div>
+      )}
     </div>
   );
 };

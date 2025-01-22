@@ -7,7 +7,7 @@ import MyStoryComponent from "../sections/composition/components/myStory/MyStory
 import SelectValuesGrid from "../sections/composition/components/ToggleValueSelection";
 import SecondaryValues from "../sections/composition/secondaryValues/SecondaryValues";
 
-export const CompositionContext = createContext({
+export const VibrationContext = createContext({
   steps: [],
   activeStep: null,
   completeStep: () => {},
@@ -17,7 +17,7 @@ export const CompositionContext = createContext({
   setRecords: () => {},
 });
 
-export const CompositionProvider = ({ children }) => {
+export const VibrationProvider = ({ children }) => {
   const { user } = useUser();
   const [steps, setSteps] = useState([]);
   const [records, setRecords] = useState(null);
@@ -180,7 +180,7 @@ export const CompositionProvider = ({ children }) => {
   };
 
   return (
-    <CompositionContext.Provider
+    <VibrationContext.Provider
       value={{
         steps,
         activeStep,
@@ -192,6 +192,6 @@ export const CompositionProvider = ({ children }) => {
       }}
     >
       {children}
-    </CompositionContext.Provider>
+    </VibrationContext.Provider>
   );
 };

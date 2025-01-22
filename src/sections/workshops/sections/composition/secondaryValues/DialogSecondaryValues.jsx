@@ -1,24 +1,27 @@
 import { Dialog } from "@headlessui/react";
 import { useContext, useEffect, useState } from "react";
 
-import { CompositionContext } from "../../../context/CompositionContext";
+import { VibrationContext } from "../../../context/VibrationContext";
+import { useSecondaryValues } from "./SecondaryValuesContext";
 
-export const DialogSecondaryValues = ({
-  isOpen,
-  closeDialog,
-  mainValue,
-  values,
-  setValues,
-  allSelectedValues,
-  onSave,
-}) => {
+export const DialogSecondaryValues = () => {
+  const {
+    isOpen,
+    closeDialog,
+    selectedMainValue: mainValue,
+    selectedValues: secondaryValues,
+    setSelectedValues,
+    allSelectedValues,
+    handleSaveSelection,
+  } = useSecondaryValues();
+
   const [maxLimitReached, setMaxLimitReached] = useState(false);
-  const { records } = useContext(CompositionContext);
+  const { records } = useContext(VibrationContext);
 
   const valuesData = records;
 
   const handleCheckboxChange = (value) => {
-    setValues((prevSelectedValues) => {
+    setSelectedValues((prevSelectedValues) => {
       if (prevSelectedValues.includes(value)) {
         setMaxLimitReached(false);
         return prevSelectedValues.filter((item) => item !== value);
@@ -32,13 +35,12 @@ export const DialogSecondaryValues = ({
   };
 
   useEffect(() => {
-    if (values.length >= 7) {
+    if (secondaryValues.length >= 7) {
       setMaxLimitReached(true);
     } else {
       setMaxLimitReached(false);
     }
-  }, [values]);
-  
+  }, [secondaryValues]);
 
   return (
     <Dialog
@@ -65,7 +67,7 @@ export const DialogSecondaryValues = ({
             <label
               key={value}
               className={`flex items-center justify-start text-xs space-x-1 p-1 border rounded ${
-                values.includes(value)
+                secondaryValues.includes(value)
                   ? "border-blue-500 bg-blue-100"
                   : "border-gray-200"
               }`}
@@ -73,16 +75,16 @@ export const DialogSecondaryValues = ({
             >
               <input
                 type="checkbox"
-                checked={values.includes(value)}
+                checked={secondaryValues.includes(value)}
                 onChange={() => handleCheckboxChange(value)}
                 disabled={
-                  allSelectedValues.includes(value) && !values.includes(value)
+                  allSelectedValues.includes(value) && !secondaryValues.includes(value)
                 }
                 className="form-checkbox h-3 w-3 text-blue-600"
               />
               <span
                 className={`truncate ${
-                  allSelectedValues.includes(value) && !values.includes(value)
+                  allSelectedValues.includes(value) && !secondaryValues.includes(value)
                     ? "text-gray-400"
                     : ""
                 }`}
@@ -101,7 +103,7 @@ export const DialogSecondaryValues = ({
             Cancelar
           </button>
           <button
-            onClick={onSave}
+            onClick={handleSaveSelection}
             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded text-xs"
           >
             Guardar

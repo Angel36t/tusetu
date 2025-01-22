@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./components/header/Header";
 import Heroes from "./components/principal/Heroes";
 import HeroesTwo from "./components/principal/HeroesTwo";
-import HeroesBackground from "./components/principal/HeroesBackground";
+// import HeroesBackground from "./components/principal/HeroesBackground";
 import WhoAmI from "./components/sections/WhoAmI";
 import PriceComparison from "./components/sections/PriceComparison";
 import Testimonials from "./components/sections/Testimonials";

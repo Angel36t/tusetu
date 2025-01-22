@@ -3,8 +3,8 @@ import { useWindowSize } from "react-use";
 import { Dialog, Transition } from "@headlessui/react";
 
 import React, { Fragment, useState } from "react";
-// import { useCompositionContext } from "../../../context/CompositionContext";
-// import { useCompositionContext } from "../../../../context/CompositionContext";
+// import { useVibrationContext } from "../../../context/VibrationContext";
+// import { useVibrationContext } from "../../../../context/VibrationContext";
 
 export default function CongratulationsSecondary() {
   const [isOpen, setIsOpen] = useState(true);
@@ -14,7 +14,7 @@ export default function CongratulationsSecondary() {
     setIsOpen(false);
   }
 
-  // const { completeStep } = useCompositionContext();
+  // const { completeStep } = useVibrationContext();
 
   return (
     <>

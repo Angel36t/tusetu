@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { ClockIcon } from "@heroicons/react/24/outline";
 
 import { getRecords } from "../../api/api";
-import { CompositionContext } from "../../../../context/CompositionContext";
+import { VibrationContext } from "../../../../context/VibrationContext";
 
 const ITEMS_PER_PAGE = 72;
 
@@ -12,7 +12,7 @@ export const SummaryValues = () => {
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState(300);
   const [currentPage, setCurrentPage] = useState(1);
-  const { setRecords } = useContext(CompositionContext);
+  const { setRecords } = useContext(VibrationContext);
 
   const totalPages = Math.ceil(values.length / ITEMS_PER_PAGE);
 

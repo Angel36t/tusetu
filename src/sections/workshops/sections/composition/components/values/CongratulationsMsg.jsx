@@ -3,7 +3,7 @@ import { useWindowSize } from "react-use";
 import { Dialog, Transition } from "@headlessui/react";
 
 import React, { Fragment, useContext, useState } from "react";
-import { CompositionContext } from "../../../../context/CompositionContext";
+import { VibrationContext } from "../../../../context/VibrationContext";
 
 export default function CongratulationsDialog() {
   const [isOpen, setIsOpen] = useState(true);
@@ -13,7 +13,7 @@ export default function CongratulationsDialog() {
     setIsOpen(false);
   }
 
-  const { steps, setActiveStep } = useContext(CompositionContext);
+  const { steps, setActiveStep } = useContext(VibrationContext);
 
   const goToStep = (stepId) => {
     const selectedStep = steps.find((step) => step.id === stepId);

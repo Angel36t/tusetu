@@ -5,11 +5,11 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { postMainValues, updateProgress } from "../../api/api";
 import { useUser } from "../../../../../../context/UserContext";
 import { useValuesContext } from "../../../../context/ValuesContext";
-import { CompositionContext } from "../../../../context/CompositionContext";
+import { VibrationContext } from "../../../../context/VibrationContext";
 
 export const ConfirmationView = ({ confirmSelection }) => {
   const { user } = useUser();
-  const { progressData } = useContext(CompositionContext);
+  const { progressData } = useContext(VibrationContext);
   const { selectedValues, setSelectedValues } = useValuesContext();
   
   const isButtonDisabled = selectedValues.length !== 10;

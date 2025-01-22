@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { CompositionContext } from "../../../../context/CompositionContext";
+import { VibrationContext } from "../../../../context/VibrationContext";
 
 export default function StepsImagesValidation() {
-  const { steps, activeStep, completeStep, setActiveStep } = useContext(CompositionContext);
+  const { steps, activeStep, completeStep, setActiveStep } = useContext(VibrationContext);
 
   const goToStep = (stepId) => {
     const selectedStep = steps?.find((step) => step.id === stepId);

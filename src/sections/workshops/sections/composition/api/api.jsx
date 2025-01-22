@@ -29,12 +29,38 @@ export const getUserMainValues = async (userId) => {
   return response.data;
 };
 
+export const getPrimarySecondaryValues = async (userId) => {
+  const response = await api.get(`/primary-secondary-values/user/${userId}`);
+  return response.data;
+};
+
 export const postMainValues = async (payload) => {
   return api.post("/main-values", payload);
 };
 
+export const registerPrimarySecondaryValues = async (userId, values) => {
+  const response = await api.post("/primary-secondary-values/register", {
+    user_id: userId,
+    values,
+  });
+  return response.data;
+};
+
 export const updateProgress = async (progressId, progressData) => {
-  return api.put(`/vibration/progress/${progressId}`, { progress: progressData });
+  return api.put(`/vibration/progress/${progressId}`, {
+    progress: progressData,
+  });
+};
+
+// LIFE HISTORY
+export const getLifeHistory = async (userId) => {
+  const response = await api.get(`/life-history/${userId}`);
+  return response.data;
+};
+
+export const saveLifeHistory = async (payload) => {
+  const response = await api.post(`/life-history`, payload);
+  return response.data;
 };
 
 export default api;

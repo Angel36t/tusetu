@@ -48,7 +48,7 @@ function Sidebar() {
       <div className="p-4 border-t mb-12">
         <div className="flex items-center space-x-3">
           <img
-            src={user?.avatar || "https://via.placeholder.com/150"}
+            src={user?.avatar || "/icon/mountain.png"}
             alt="Avatar"
             className="w-12 h-12 rounded-full object-cover"
           />

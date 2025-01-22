@@ -2,23 +2,19 @@ import React from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 import { DialogSecondaryValues } from "./DialogSecondaryValues";
+import { useSecondaryValues } from "./SecondaryValuesContext";
 
-const SecondaryValuesTable = ({
-  mainValues,
-  assignments,
-  handleRemoveValue,
-  handleClearAllValues,
-  openDialog,
-  isOpen,
-  closeDialog,
-  selectedMainValue,
-  selectedValues,
-  setSelectedValues,
-  allSelectedValues,
-  handleSaveSelection,
-  allMainValuesHaveSelections,
-  handleSaveAllAssignments,
-}) => {
+const SecondaryValuesTable = () => {
+  const {
+    mainValues,
+    assignments,
+    handleRemoveValue,
+    handleClearAllValues,
+    openDialog,
+    allMainValuesHaveSelections,
+    handleSaveAllAssignments,
+  } = useSecondaryValues();
+
   return (
     <>
       <h2 className="text-2xl font-bold text-center mb-4 text-bl-100">
@@ -39,7 +35,7 @@ const SecondaryValuesTable = ({
             </th>
             <th
               className="px-6 py-3 border-b font-semibold text-sm text-center"
-              style={{ width: "70%" }}
+              style={{ width: "50%" }}
             >
               Valores Secundarios
             </th>
@@ -65,11 +61,11 @@ const SecondaryValuesTable = ({
               </td>
               <td
                 className="px-6 py-4 border-b text-gray-600 text-center"
-                style={{ width: "70%" }}
+                style={{ width: "50%" }}
               >
-                {assignments[main].length > 0 ? (
+                {assignments[main]?.secondaryValues?.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
-                    {assignments[main].map((value) => (
+                    {assignments[main].secondaryValues.map((value) => (
                       <div
                         key={value}
                         className="inline-flex items-center px-3 py-1 bg-blue-100 rounded-full text-xs text-blue-700"
@@ -86,7 +82,7 @@ const SecondaryValuesTable = ({
                   </div>
                 ) : (
                   <span className="text-gray-400">
-                    No hay valor secundario asignado
+                    No hay valores secundarios asignados
                   </span>
                 )}
               </td>
@@ -125,15 +121,7 @@ const SecondaryValuesTable = ({
         </div>
       )}
 
-      <DialogSecondaryValues
-        isOpen={isOpen}
-        closeDialog={closeDialog}
-        mainValue={selectedMainValue}
-        values={selectedValues}
-        setValues={setSelectedValues}
-        allSelectedValues={allSelectedValues}
-        onSave={handleSaveSelection}
-      />
+      <DialogSecondaryValues />
     </>
   );
 };
