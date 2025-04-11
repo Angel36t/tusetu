@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-
-import { getPrimarySecondaryValues, registerPrimarySecondaryValues } from "../../api/api";
-import CongratulationsDominant from "./CongratulationsDominant";
+import {
+  getPrimarySecondaryValues,
+  registerPrimarySecondaryValues,
+} from "../../api/api";
 import { useUser } from "../../../../../../context/UserContext";
+import SecondaryValuesSkeleton from "../skeleton/SecondaryValuesSkeleton";
 
 function DominantValue() {
   const [mainValues, setMainValues] = useState([]);
@@ -13,7 +15,6 @@ function DominantValue() {
   const { user } = useUser();
   const userId = user.id;
 
-  // Cargar valores desde el endpoint al montar el componente
   useEffect(() => {
     const fetchValues = async () => {
       try {
@@ -27,7 +28,6 @@ function DominantValue() {
         );
         setMainValues(formattedValues);
 
-        // Inicializar dominantValues desde los datos existentes
         const initialDominantValues = Object.fromEntries(
           Object.entries(response.data.values).map(([key, value]) => [
             key,
@@ -46,21 +46,20 @@ function DominantValue() {
   }, [userId]);
 
   const handleSetDominant = (mainName, value) => {
-    setDominantValues((prevDominantValues) => {
-      const updatedValues = {
-        ...prevDominantValues,
-        [mainName]: prevDominantValues[mainName] === value ? null : value,
+    setDominantValues((prev) => {
+      const updated = {
+        ...prev,
+        [mainName]: prev[mainName] === value ? null : value,
       };
       const allCompleted = mainValues.every(
-        (main) => updatedValues[main.name] != null
+        (main) => updated[main.name] != null
       );
       setShowConfirm(allCompleted);
-      return updatedValues;
+      return updated;
     });
   };
 
   const handleSave = async () => {
-    // Crear el objeto a enviar al backend
     const updatedValues = mainValues.reduce((acc, main) => {
       acc[main.name] = {
         dominant: dominantValues[main.name],
@@ -79,90 +78,117 @@ function DominantValue() {
 
   if (loading) {
     return (
-      <div className="text-center mt-8">
-        <p className="text-gray-500">Cargando valores...</p>
-      </div>
+      <SecondaryValuesSkeleton/>
     );
   }
 
   return (
     <div className="overflow-x-auto max-w-5xl mx-auto mt-8 px-4">
-      <h2 className="text-2xl font-bold text-center mb-4 text-bl-100">
-        Identifica tu valor "Dominante"
-      </h2>
-      <p className="text-gray-500 text-center mb-6">
-        Selecciona un valor principal o secundario como valor dominante para
-        cada fila.
-      </p>
-      <table className="w-full bg-white border border-gray-200 rounded-lg shadow-sm text-sm">
+      <div className="bg-[#F7E9BA] p-4 rounded-md">
+        <h2 className="text-fs-18 text-center mb-4 o-b">
+          Identifica tu valor "Dominante"
+        </h2>
+        <p className="text-center text-fs-14">
+          Selecciona un valor principal o secundario como valor dominante para
+          cada fila.
+        </p>
+      </div>
+
+      <div className="border-t-2 border-[#BEB79B] shadow-sm w-full my-6" />
+
+      <table className="w-full bg-white text-sm text-left text-gray-700 rounded-xl overflow-hidden shadow-md">
         <thead>
-          <tr className="bg-bl-100 text-white uppercase">
-            <th className="px-6 py-3 border-b text-left font-semibold text-sm">
-              Valor Principal
+          <tr className="bg-[#70A2D3] text-white">
+            <th className="px-4 py-3 border-b font-semibold text-sm">
+              Valor principal
             </th>
-            <th className="px-6 py-3 border-b text-left font-semibold text-sm">
-              Valores Secundarios
+            <th className="px-4 py-3 border-b font-semibold text-sm">
+              Valores ligados
             </th>
-            <th className="px-6 py-3 border-b text-center font-semibold text-sm">
+            <th className="px-4 py-3 border-b font-semibold text-sm text-center">
               Conteo
             </th>
-            <th className="px-6 py-3 border-b text-center font-semibold text-sm">
-              Valor Dominante
+            <th className="px-4 py-3 border-b font-semibold text-sm text-center">
+              Valor dominante
             </th>
           </tr>
         </thead>
         <tbody>
-          {mainValues.map((main) => (
+          {mainValues.map((main, index) => (
             <tr
-              key={main.name}
-              className="hover:bg-gray-50 transition-colors duration-200"
+              key={`${main.name}-${index}`}
+              className="hover:bg-[#F4F9FF] transition-colors duration-200"
             >
-              <td
-                className={`px-6 py-4 border-b text-gray-800 font-medium text-sm cursor-pointer ${
-                  dominantValues[main.name] === main.name ? "bg-blue-100" : ""
-                }`}
-                onClick={() => handleSetDominant(main.name, main.name)}
-              >
-                {main.name}
-              </td>
-              <td className="px-6 py-4 border-b text-gray-600">
-                <div className="flex flex-wrap gap-2">
-                  {main.secondaryValues.map((value) => (
-                    <div
-                      key={value}
-                      onClick={() => handleSetDominant(main.name, value)}
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs cursor-pointer ${
-                        dominantValues[main.name] === value
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {value}
-                    </div>
-                  ))}
+              {/* Valor principal */}
+              <td className="px-4 py-3 border-b  font-medium">
+                <div
+                  onClick={() => handleSetDominant(main.name, main.name)}
+                  className={`px-3 py-1 rounded-md text-xs cursor-pointer transition-colors duration-200 font-semibold text-center inline-block w-[120px] ${
+                    dominantValues[main.name] === main.name
+                      ? "bg-[#DAE462] text-black"
+                      : "bg-[#D9E5EC] text-gray-800"
+                  }`}
+
+                >
+                  {main.name}
                 </div>
               </td>
-              <td className="px-6 py-4 border-b text-center text-gray-800 font-medium text-sm">
+
+              {/* Valores secundarios */}
+              <td className="px-4 py-3 border-b">
+                {main.secondaryValues.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {main.secondaryValues.map((value) => (
+                      <div
+                        key={value}
+                        onClick={() => handleSetDominant(main.name, value)}
+                        className={`inline-block px-3 py-1 rounded-md text-xs cursor-pointer transition-colors duration-200 ${
+                          dominantValues[main.name] === value
+                            ? "bg-[#DAE462] text-black font-semibold"
+                            : "bg-[#F0F0F0] text-gray-700"
+                        }`}
+                      >
+                        {value}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-gray-400 text-sm">
+                    No hay valor secundario asignado
+                  </span>
+                )}
+              </td>
+
+              {/* Conteo */}
+              <td className="px-4 py-3 border-b text-center font-semibold">
                 {main.secondaryValues.length}
               </td>
-              <td className="px-6 py-4 border-b text-center text-sm">
+
+              {/* Valor dominante */}
+              <td className="px-4 py-3 border-b text-center">
                 {dominantValues[main.name] ? (
-                  <span className="text-blue-600 font-semibold">
+                  <span className="inline-flex items-center gap-2 text-black px-3 py-1 rounded-full text-xs o-b  justify-center">
+                    <img
+                      src="/icon/circle-star.svg"
+                      alt="Dominante"
+                      className="w-5 h-5"
+                    />
                     {dominantValues[main.name]}
                   </span>
                 ) : (
-                  <span className="text-gray-400">-</span>
+                  <span className="text-gray-300">-</span>
                 )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
       {showConfirm && (
         <div className="text-center mt-6">
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition-colors duration-200"
+            className="px-4 py-2 bg-[#DAE462] text-black font-semibold rounded hover:bg-[#cdd85c] transition-colors duration-200"
           >
             Guardar valores dominantes
           </button>

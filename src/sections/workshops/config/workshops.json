@@ -5,7 +5,8 @@
       "instructor": "Alexander Assad",
       "progress": "50/100",
       "image": "https://eresmama.com/wp-content/uploads/2019/06/companerismo-trabajo-en-equipo-valores-en-la-escuela.jpg",
-      "link": "/talleres/vibracion"
+      "link": "/talleres/vibracion",
+      "available": true
     },
     {
       "id": 2,
@@ -13,7 +14,8 @@
       "instructor": "Alexander Assad",
       "progress": "75/100",
       "image": "https://media.gq.com.mx/photos/5dc5a466e33c9600085c8b30/16:9/w_2560%2Cc_limit/GettyImages-604619026.jpg",
-      "link": "/talleres/composicion"
+      "link": "/talleres/composicion",
+      "available": false
     }
   ]
   

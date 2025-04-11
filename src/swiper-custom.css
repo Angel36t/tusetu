@@ -1,0 +1,18 @@
+/* Estilos para los dots de la paginación */
+.swiper-pagination {
+    position: relative !important; /* Asegura que los dots estén debajo */
+    margin-top: 20px;
+  }
+  
+  .swiper-pagination-bullet {
+    background-color: #2A2115 !important; /* Color de los dots */
+    opacity: 0.5;
+    width: 10px;
+    height: 10px;
+    transition: opacity 0.3s ease;
+  }
+  
+  .swiper-pagination-bullet-active {
+    opacity: 1; /* Hace que el dot activo sea más visible */
+  }
+  

@@ -1,49 +1,81 @@
 export default function HeroesTwo() {
   return (
-    <div className="relative overflow-hidden text-white h-[88vh]">
+    <div className="relative overflow-hidden text-white min-h-screen  max-md:h-[102vh]">
       {/* Imagen para escritorio */}
       <img
         alt="Fondo decorativo para escritorio"
-        src="/banners/home/fade-effect.jpg"
+        src="/banners/home/banner-principal.jpg"
         className="absolute top-0 left-0 -z-10 w-full h-full object-cover hidden sm:block"
       />
 
       {/* Imagen para móvil */}
       <img
         alt="Fondo decorativo para móvil"
-        src="/banners/barco.jpg"
-        className="absolute top-0 left-0 -z-10 w-full h-full object-cover block sm:hidden brightness-50"
+        src="/bg/mobile/Hero-Banner.jpg"
+        className="absolute top-0 left-0 -z-10 w-full h-full object-cover block sm:hidden"
       />
 
-      <div className="container mx-auto px-6 lg:px-8">
-        <div data-aos="fade-right" className="max-w-2xl py-20 sm:py-10">
-          <div className="text-left pl-6 sm:pl-10 md:pl-24">
-            {/* <h1 className="text-lg m-b tracking-tight sm:text-4xl md:text-5xl">
-              Tu puente hacia el comercio internacional, fácil y rápido
-            </h1> */}
-            {/* <p className="mt-4 text-sm text-gray-400 sm:mt-8 sm:text-base m-m">
-              Gestionamos cada detalle de tus importaciones y exportaciones,
-              desde el origen hasta el destino.
+      <div className="container mx-auto px-6 lg:px-8 mt-[8vh] max-md:px-4">
+        <div
+          data-aos="fade-right"
+          className="max-w-[58rem] py-20 sm:py-10 max-md:py-18 max-md:py-10"
+        >
+          <div className="text-left pl-6 sm:pl-10 md:pl-24 max-md:p-0">
+            <h1 className="text-lg m-b sm:text-4xl md:text-[3.4rem] tracking-widest !leading-tight max-md:text-3xl">
+              <div>ES MOMENTO DE</div>
+              <div className="text-[#EEFD64]">VIVIR LA VIDA ÉPICA</div>
+              <div>Que LLEVAS DENTRO</div>
+            </h1>
+            <p className="mt-4 text-sm text-white sm:mt-8 sm:text-base o-n tracking-widest pr-[8rem] max-md:pt-8 max-md:text-xs">
+              <div>
+                Para diseñarla, la clave es la{" "}
+                <span className="o-b">CLARIDAD PERSONAL</span>.
+              </div>
+              <br />
+              <div>
+                Con ella <span className="o-b">RECONECTAS</span> y te{" "}
+                <span className="o-b">RELACIONAS</span> contigo mismo.
+              </div>
+              <div>Forjas tu salud mental, autoestima, y potencial.</div>
+              <div>Logras estar presente en balance, paz y autocontrol.</div>
+              <br />
+              <div>
+                Recuerda, tu eres el director de tu película, el arquitecto de{" "}
+                <span className="o-b">TU BIENESTAR</span>.
+              </div>
+              <div>
+                Este es el instante en que tomas las riendas de{" "}
+                <span className="o-b">TU HISTORIA</span> y la comienzas a
+                narrar.
+              </div>
+              <br />
+              <div className="">
+                Es hora de dejar de{" "}
+                <span className="o-b">PROCRASTINAR TU FUTURO</span>.
+              </div>
+              <div>
+                Es hora de dejar de{" "}
+                <span className="o-b">PROCRASTINAR TU GRANDEZA.</span>
+              </div>
+              
             </p>
             <div className="mt-6 flex items-center space-x-4 sm:mt-10">
-              <a href="#" className="text-sm m-s-b">
-                Descubre nuestras soluciones <span aria-hidden="true">→</span>
+              <a
+                href="#"
+                className="text-m o-b bg-yellow text-black p-2 rounded-lg transition-colors duration-300 hover:bg-white hover:text-black max-md:text-xs max-md:p-2"
+              >
+               Conocer Metodología
               </a>
-            </div> */}
+
+              <a
+                href="#"
+                className="text-m o-b bg-transparent border border-white text-white p-2 rounded-lg transition-colors duration-300 hover:bg-[#EEFD64] hover:text-black max-md:text-xs max-md:p-2"
+              >
+                Ir a Webinars
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-      >
-        <div
-          className="relative left-1/2 aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-pink-400 to-indigo-400 opacity-30 sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-          }}
-        />
       </div>
     </div>
   );

@@ -1,17 +1,23 @@
 import { useState, useEffect, useContext } from "react";
-import { ClockIcon } from "@heroicons/react/24/outline";
 
+import { ValuesGrid } from "./ValuesGrid";
 import { getRecords } from "../../api/api";
+import { FullScreenDialog } from "./FullScreenDialog";
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { VibrationContext } from "../../../../context/VibrationContext";
+import { SkeletonSummaryValues } from "../skeleton/SkeletonSummaryValues";
 
-const ITEMS_PER_PAGE = 72;
+const ITEMS_PER_PAGE = 40;
+const INITIAL_TIME = 480;
 
-export const SummaryValues = () => {
+const SummaryValues = () => {   // <-- Ya no exportas aquí
   const [values, setValues] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [timeLeft, setTimeLeft] = useState(300);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [started, setStarted] = useState(false);
+  const [viewMode, setViewMode] = useState("normal");
   const { setRecords } = useContext(VibrationContext);
 
   const totalPages = Math.ceil(values.length / ITEMS_PER_PAGE);
@@ -23,10 +29,9 @@ export const SummaryValues = () => {
         const response = await getRecords();
         const records = response.records.map((record) => record.value);
         setRecords(records);
-        
         setValues(records);
       } catch (err) {
-        setError("Error loading data. Please try again later.");
+        setError("Error cargando datos. Por favor, intenta nuevamente.");
       } finally {
         setLoading(false);
       }
@@ -35,16 +40,17 @@ export const SummaryValues = () => {
   }, []);
 
   useEffect(() => {
-    if (timeLeft > 0) {
-      const timer = setInterval(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearInterval(timer);
-    }
-  }, [timeLeft]);
+    if (!started || timeLeft <= 0) return;
+    const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+    return () => clearInterval(timer);
+  }, [started, timeLeft]);
 
   const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    const minutes = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const secs = (seconds % 60).toString().padStart(2, "0");
+    return { minutes, seconds: secs };
   };
 
   const getPageValues = () => {
@@ -52,116 +58,82 @@ export const SummaryValues = () => {
     return values.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  const toggleViewMode = () => {
+    setViewMode((prev) => (prev === "normal" ? "fullscreen" : "normal"));
   };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
+  const { minutes, seconds } = formatTime(timeLeft);
 
-  const handlePageSelect = (page) => {
-    setCurrentPage(page);
-  };
-
-  if (loading) {
-    return <div className="text-center">Cargando datos...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
-  }
+  if (loading) return <SkeletonSummaryValues />;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
-    <div className="max-w-screen-lg mx-auto p-6 rounded-lg border-gray-200">
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-bl-100">
-          ¡Explora y Analiza los Valores!
-        </h1>
-        <p className="text-gray-700 mt-2">
-          ¡Hey! Esta parte está hecha justo para que explores y analices esas{" "}
-          <strong>200 opciones de valores</strong>. Sé que puede sonar un poco
-          intimidante al principio, pero estoy seguro de que puedes con esto. 🚀
+    <div className="relative mx-auto">
+      {/* Texto introductorio */}
+      <div className="bg-[#F7E9BA] p-6 rounded-md mb-6 text-center">
+        <h2 className="text-fs-18 mb-4 o-b">Explora y analiza los valores</h2>
+        <p className="text-fs-14">
+          ¡Hey! Esta parte está hecha para que explores y analices esas{" "}
+          <span className="o-b">200 opciones de valores</span>.
         </p>
-        <br />
-        <div className="text-x text-center flex items-center justify-center">
-          <ClockIcon className="w-6 h-6 text-bl-100 mr-2" />{" "}
-          {/* Icono de reloj */}
-          Tiempo restante:{" "}
-          <span className="text-red-100 font-bold ml-2">
-            {formatTime(timeLeft)}
-          </span>
-        </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <div className="relative w-full sm:w-auto">
-          <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-300 mt-2 sm:mt-0">
-            <div
-              style={{ width: `${(timeLeft / 300) * 100}%` }}
-              className="bg-red-500 transition-all duration-300 ease-in-out"
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      {timeLeft > 0 ? (
-        <>
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-            {getPageValues().map((value, index) => (
-              <div
-                key={index}
-                className="w-full py-2 rounded-lg text-sm text-center bg-blue-100 text-bl-100 shadow-sm border border-gray-200 hover:bg-bl-110 transition-all"
-              >
-                {value}
+      {/* Contenido del juego */}
+      <div className={`${!started ? "blur-sm pointer-events-none" : ""}`}>
+        <div className="relative flex items-center justify-center mb-6">
+          <div className="flex flex-col items-center">
+            <span className="text-gray-600 text-xs tracking-wide uppercase w-b mb-1">
+              Tiempo restante
+            </span>
+            <div className="flex items-center space-x-2">
+              <div className="bg-gray-100 border border-gray-300 rounded-md px-3 py-2 text-xl w-16 text-center">
+                {minutes}
               </div>
-            ))}
+              <span className="text-xl font-semibold text-gray-600">:</span>
+              <div className="bg-gray-100 border border-gray-300 rounded-md px-3 py-2 text-xl w-16 text-center">
+                {seconds}
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center mt-6">
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-300 transition-all"
-            >
-              Anterior
-            </button>
-            <div className="flex space-x-2 my-4 sm:my-0">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePageSelect(page)}
-                    className={`px-3 py-1 rounded-lg border text-sm ${
-                      page === currentPage
-                        ? "bg-bl-100 text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              )}
-            </div>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50 hover:bg-gray-300 transition-all"
-            >
-              Siguiente
-            </button>
-          </div>
-        </>
-      ) : (
-        <div className="text-center mt-12">
-          <h3 className="text-xl font-semibold text-gray-700">
-            Se ha terminado el tiempo.
-          </h3>
-          <p className="text-gray-500 mt-2">
-            Por favor, reinicia la página o ponte en contacto para más detalles.
-          </p>
+          <button
+            onClick={toggleViewMode}
+            className="absolute right-0 flex items-center gap-2 px-4 py-2 bg-[#d4e157] hover:bg-[#c0ca33] text-gray-800 font-semibold rounded-md shadow transition"
+          >
+            <ArrowsPointingOutIcon className="h-5 w-5" />
+            Pantalla completa
+          </button>
+        </div>
+
+        {viewMode === "normal" ? (
+          <ValuesGrid
+            values={getPageValues()}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        ) : (
+          <FullScreenDialog values={values} onClose={toggleViewMode} />
+        )}
+      </div>
+
+      {/* Overlay Empezar */}
+      {!started && (
+        <div className="absolute inset-0 top-[150px] bg-opacity-80 backdrop-blur-sm flex flex-col items-center justify-center z-20 p-6 rounded-lg">
+          <button
+            onClick={() => {
+              setStarted(true);
+              setTimeLeft(INITIAL_TIME);
+            }}
+            className="flex items-center gap-2 px-6 py-3 bg-[#d4e157] hover:bg-[#c0ca33] text-gray-800 font-semibold rounded-md shadow-md transition"
+          >
+            <span>Empezar</span>
+            <img src="/icon/play-circle.svg" alt="Play" />
+          </button>
         </div>
       )}
     </div>
   );
 };
+
+export default SummaryValues; // <-- Aquí haces el export default

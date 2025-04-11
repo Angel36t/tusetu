@@ -1,19 +1,24 @@
 import { useEffect, useState } from "react";
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 
 import { getRecords, getUserMainValues } from "../../api/api";
 import { useUser } from "../../../../../../context/UserContext";
 import { useValuesContext } from "../../../../context/ValuesContext";
+import { FullscreenSelectionModal } from "./components/FullscreenSelectionModal";
+import { ValuesSelectionGrid } from "./components/ValuesSelectionGrid";
 
-const ITEMS_PER_PAGE = 48;
+const ITEMS_PER_PAGE = 40;
 
-export const SelectionView = () => {
-  const { selectedValues, setSelectedValues, toggleValueSelection } = useValuesContext();
+export const SelectionView = ({ setLoading }) => {
+  const { selectedValues, setSelectedValues, toggleValueSelection } =
+    useValuesContext();
   const [values, setValues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
-  const totalPages = Math.ceil(values.length / ITEMS_PER_PAGE);
+  const [isFullscreenOpen, setIsFullscreenOpen] = useState(false); // 👈 Estado para abrir/cerrar el modal
   const { user } = useUser();
 
+  const totalPages = Math.ceil(values.length / ITEMS_PER_PAGE);
 
   const getPageValues = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -27,6 +32,9 @@ export const SelectionView = () => {
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
+
+  const openFullscreen = () => setIsFullscreenOpen(true);
+  const closeFullscreen = () => setIsFullscreenOpen(false);
 
   useEffect(() => {
     const fetchValues = async () => {
@@ -42,55 +50,86 @@ export const SelectionView = () => {
       } catch (err) {
         setError("Error loading data. Please try again later.");
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchValues();
-  }, [setSelectedValues]);
+  }, [setSelectedValues, setLoading]);
 
   return (
-    <div className="max-w-screen-lg mx-auto p-4 bg-white rounded-lg">
-      {error && <p className="text-red-500 text-center">{error}</p>}
-      <p className="text-lg font-semibold text-bl-100 text-center mb-4">
-        Seleccionados: {selectedValues.length} / 10
-      </p>
+    <div className="relative max-w-screen-lg mx-auto p-4 bg-white px-[1rem] py-[1rem]">
+      {/* Botón Pantalla Completa */}
+      <button
+        onClick={openFullscreen}
+        className="absolute right-4 top-4 flex items-center gap-2 px-4 py-2 bg-[#d4e157] hover:bg-[#c0ca33] text-gray-800 font-semibold rounded-md shadow transition"
+      >
+        <>
+          <ArrowsPointingOutIcon className="h-5 w-5" />
+          Pantalla completa
+        </>
+      </button>
 
-      <div className="flex justify-between items-center mb-4">
+      {error && <p className="text-red-500 text-center">{error}</p>}
+
+      <ValuesSelectionGrid
+        values={getPageValues()}
+        selectedValues={selectedValues}
+        toggleValueSelection={toggleValueSelection}
+      />
+
+      {/* Paginación */}
+      <div className="flex justify-center items-center mt-6 gap-2">
         <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-bl-100 text-white rounded-lg disabled:opacity-50 hover:bg-gray-400 transition-colors"
+          className={`w-10 h-10 flex justify-center items-center rounded-md transition ${
+            currentPage === 1
+              ? "bg-[#F4ECD9] text-[#7B6848] cursor-not-allowed opacity-50"
+              : "bg-[#F4ECD9] text-[#7B6848] hover:bg-[#E8E0C9]"
+          }`}
         >
-          Anterior
+          &#x276E;
         </button>
-        <span className="px-3 py-1 text-sm font-semibold text-gray-600">{`Página ${currentPage} de ${totalPages}`}</span>
+
+        <div className="flex gap-2">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`w-10 h-10 flex justify-center items-center rounded-md text-sm font-semibold transition ${
+                page === currentPage
+                  ? "bg-[#DAE462] text-black"
+                  : "bg-[#F5F5F5] text-[#444] hover:bg-[#E8E0C9]"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-bl-100 text-white rounded-lg disabled:opacity-50 hover:bg-bl- transition-colors"
+          className={`w-10 h-10 flex justify-center items-center rounded-md transition ${
+            currentPage === totalPages
+              ? "bg-[#F4ECD9] text-[#7B6848] cursor-not-allowed opacity-50"
+              : "bg-[#F4ECD9] text-[#7B6848] hover:bg-[#E8E0C9]"
+          }`}
         >
-          Siguiente
+          &#x276F;
         </button>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-        {getPageValues().map((value, index) => (
-          <button
-            key={index}
-            onClick={() => toggleValueSelection(value)}
-            className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors truncate ${
-              selectedValues.includes(value)
-                ? "bg-bl-100 text-white hover:bg-blue-700"
-                : "bg-white shadow-2xl border hover:bg-blue-100"
-            }`}
-            disabled={
-              selectedValues.length === 10 && !selectedValues.includes(value)
-            }
-          >
-            {value}
-          </button>
-        ))}
-      </div>
+      {/* Modal de Pantalla Completa */}
+      <FullscreenSelectionModal
+        isOpen={isFullscreenOpen}
+        onClose={closeFullscreen}
+        values={values}
+        selectedValues={selectedValues}
+        toggleValueSelection={toggleValueSelection}
+      />
     </div>
   );
 };

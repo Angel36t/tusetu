@@ -74,69 +74,124 @@ export default function WhoAmI() {
     <div
       id="quiensoy"
       ref={sectionRef}
-      className="py-24 sm:py-32"
-      style={{
-        backgroundImage: "url(/bg/bg-my.jpg)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+      className="relative overflow-hidden text-white min-h-screen"
     >
+      <img
+        alt="Fondo decorativo para escritorio"
+        src="/bg/bg-quien-soy.jpg"
+        className="absolute top-0 left-0 -z-10 w-full h-full object-cover hidden sm:block"
+      />
+
+      {/* Imagen para móvil */}
+      <img
+        alt="Fondo decorativo para móvil"
+        src="/bg/mobile/history.jpg"
+        className="absolute top-0 left-0 -z-10 w-full h-full object-cover block sm:hidden"
+      />
+
       <div className="relative isolate">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="mx-auto flex max-w-2xl flex-col gap-16 bg-white/5 px-6 py-16 ring-1 ring-white/10 sm:rounded-3xl sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20 xl:px-20">
+        <div className="mx-auto max-w-7xl sm:px-6 sm:py-36 lg:px-8">
+          <div className="mx-auto flex max-w-2xl flex-col gap-16  px-6 py-16 sm:rounded-3xl sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20 xl:px-0 max-md:pb-36">
             <img
               alt=""
-              src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/bFllqMEvukCHcMhpPWWR/media/666cdf32f9ac8681b655c0f8.jpeg"
-              className="photocta-image h-96 w-full flex-none rounded-2xl object-cover shadow-xl lg:aspect-square lg:h-auto lg:max-w-sm"
+              src="/bg/alex-quien-soy.png"
+              className="hidden sm:block photocta-image h-[50rem] w-full flex-none rounded-2xl object-cover lg:aspect-square lg:[50rem] lg:max-w-sm"
             />
             <div className="w-full flex-auto">
-              <h2 className="photocta-title text-pretty text-4xl p-m tracking-tight text-white sm:text-5xl">
-                ¿Quién soy?
+              {/* Título centrado */}
+              <h2 className="photocta-title m-b pb-4 text-center text-pretty text-4xl tracking-tight text-white sm:text-4xl max-md:text-fs-24">
+                EL COMIENZO DE LA HISTORIA
               </h2>
-              <p className="mt-6 text-pretty text-lg/8 text-gray-300 m-m">
-                Llevo más de 34 años practicando la introspección. Durante miles
-                de horas de autoobservación y solitud, he contemplado el mundo y
-                la vida desde múltiples perspectivas. Como psicólogo de corazón
-                e ingeniero industrial de carrera, mi pasión ha sido transformar
-                conceptos abstractos en herramientas prácticas y funcionales.
-              </p>
-              <ul
-                role="list"
-                className="mt-10 grid grid-cols-1 gap-x-8 gap-y-3 text-base/7 text-white sm:grid-cols-2"
-              >
-                {benefits.map((benefit) => (
-                  <li key={benefit} className="photocta-benefit flex gap-x-3">
-                    <CheckCircleIcon
-                      aria-hidden="true"
-                      className="h-7 w-5 flex-none"
-                    />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-10 flex">
-                <a
-                  href="#"
-                  className="photocta-link text-sm/6 font-semibold text-indigo-400"
-                >
-                  Entra a mi curso y transforma tu vida{" "}
-                  <span aria-hidden="true">&rarr;</span>
-                </a>
+
+              {/* Contenedor de dos columnas */}
+              <div className="mt-6 flex flex-col sm:flex-row gap-6 text-base text-gray-300 max-md:text-fs-12">
+                {/* Columna izquierda */}
+                <div className="w-full sm:w-1/2 text-pretty">
+                  <p>
+                    A mis <span className="o-b">7 años</span> viví una
+                    experiencia reveladora que cambió el rumbo de mi vida.
+                  </p>
+                  <br />
+                  <p>
+                    Ese día, sin comprenderlo del todo, inicié el viaje más
+                    interesante de mi existencia:
+                    <span className="o-b"> el viaje hacia mi interior</span>.
+                    Desde entonces he sido un explorador en constante
+                    introspección, aventurándome en la relación más importante…
+                    aquella
+                    <span className="o-b"> CONMIGO MISMO</span>.
+                  </p>
+                  <br />
+                  <p>
+                    Al hacerlo he abierto brechas. Subido montañas. Expandido
+                    mis horizontes. Observado. Cuestionado. Procesado, tanto mi
+                    mundo interno como externo.
+                  </p>
+                  <br />
+                  <p>
+                    Sigo haciéndolo y siempre lo haré. Ya que con cada paso
+                    fomento en mí el
+                    <span className="o-b">
+                      {" "}
+                      ‘Emprender como Filosofía de Vida’
+                    </span>
+                    .
+                  </p>
+                  <br />
+                  <p>
+                    Una manera de vivir que, bajo mis términos, me reta a
+                    empujar mis límites, cuestionar mis creencias y ser un
+                    coleccionista de sabiduría y perspectivas. A ser un pionero
+                    motivado por constante expansión.
+                  </p>
+                  <br />
+                  <a
+                    href="#"
+                    className="text-m o-b  bg-yellow text-black p-2 rounded-lg transition-colors duration-300 hover:bg-white hover:text-black"
+                  >
+                    Conocer Metodología
+                  </a>
+                </div>
+
+                {/* Columna derecha */}
+                <div className="w-full sm:w-1/2 text-pretty max-md:hidden">
+                  <p>
+                    Para ello convertí mi{" "}
+                    <span className="o-b">zona de confort</span> en mi
+                    campamento base desde donde emprendo nuevas expediciones,
+                    exponiéndome a mis límites en diferentes aspectos de mi
+                    vida, como un
+                    <span className="o-b"> PIONEER</span> adentrándose a lo
+                    desconocido.
+                  </p>
+                  <br />
+                  <p>
+                    La intención es desarrollar, madurar, evolucionar.
+                    Recolectar herramientas para edificar la <span className="o-b"> VIDA ÉPICA</span> que
+                    diseñe.
+                  </p>
+                  <br />
+                  <p>
+                    Hoy, tras más de{" "}
+                    <span className="o-b">35 años de exploración interna</span>,
+                    quiero compartir contigo mi Metodología
+                    <span className="o-b"> PIONEER</span> y todo lo que he
+                    aprendido en el camino.
+                  </p>
+                  <br />
+                  <p>
+                    Mi <span className="o-b">objetivo</span> es que tú también puedas planear tus propias
+                    expediciones y excursiones.
+                  </p>
+                  <br />
+                  <p>
+                    Que tú también te conviertas en un{" "}
+                    <span className="o-b">PIONEER</span> en constante expansión.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 -top-16 -z-10 flex transform-gpu justify-center overflow-hidden blur-3xl"
-        >
-          <div
-            style={{
-              clipPath:
-                "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
-            }}
-            className="aspect-[1318/752] w-[82.375rem] flex-none bg-gradient-to-r from-[#80caff] to-[#4f46e5] opacity-25"
-          />
         </div>
       </div>
     </div>

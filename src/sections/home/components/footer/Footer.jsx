@@ -62,7 +62,7 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-white">
+    <footer className="max-md:pt-[21rem] bg-white" style={{ backgroundImage: "url('/bg/Footer.svg')" }}>
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
         <nav
           aria-label="Footer"
@@ -72,7 +72,7 @@ export default function Footer() {
             <a
               key={item.name}
               href={item.href}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-white m-m hover:text-[#DAE562]"
             >
               {item.name}
             </a>
@@ -85,14 +85,14 @@ export default function Footer() {
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-gray-800"
+              className="text-white hover:text-[#DAE562]"
             >
               <span className="sr-only">{item.name}</span>
               <item.icon aria-hidden="true" className="size-6" />
             </a>
           ))}
         </div>
-        <p className="mt-10 text-center text-sm/6 text-gray-600">
+        <p className="mt-10 text-center text-sm/6 text-gray-600 o-m">
           &copy; 2024 Angel Bastian. All rights reserved.
         </p>
       </div>

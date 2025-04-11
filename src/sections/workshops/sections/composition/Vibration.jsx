@@ -1,11 +1,13 @@
 
 import { VibrationProvider } from "../../context/VibrationContext";
-import StepsImagesValidation from "./components/steps/StepsImages";
+import VibrationCourseLayout from "./components/steps/VibrationCourseLayout";
+// import CourseSteps from "./components/steps/StepsImages";
+// import StepsImagesValidation from "./components/steps/StepsImages";
 
 export default function VibrationLayout() {
   return (
     <VibrationProvider>
-      <StepsImagesValidation />
+      <VibrationCourseLayout />
     </VibrationProvider>
   );
 }

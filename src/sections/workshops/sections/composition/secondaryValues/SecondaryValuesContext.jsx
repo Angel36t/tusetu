@@ -100,7 +100,6 @@ export const SecondaryValuesProvider = ({ children }) => {
 
       await registerPrimarySecondaryValues(userId, updatedAssignments);
 
-      console.log("Valores registrados correctamente.");
     } catch (error) {
       console.error("Error al registrar los valores:", error);
     } finally {
@@ -132,7 +131,6 @@ export const SecondaryValuesProvider = ({ children }) => {
     try {
       await registerPrimarySecondaryValues(userId, assignments);
       setIsSaved(true);
-      console.log("Todos los valores guardados correctamente.");
     } catch (error) {
       console.error("Error al guardar todos los valores:", error);
     }

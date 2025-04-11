@@ -7,19 +7,24 @@ const AuthGuard = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      <div className="flex flex-col items-center justify-center h-screen bg-white">
+        <div className="relative h-64 w-64 mb-4">
+          <img
+            src="/icon/logo-pioneers.svg"
+            alt="Loading..."
+            className="h-full w-full animate-pulse opacity-90"
+          />
+          <div className="absolute inset-0 bg-white opacity-40 animate-shine rounded-full"></div>
+        </div>
       </div>
     );
   }
-  
+
   if (!user) {
-    console.log("Usuario no autenticado. Redirigiendo a login...");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  
+
   return children;
-  
 };
 
 export default AuthGuard;

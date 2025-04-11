@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -27,28 +27,25 @@ const products = [
     description:
       "Explora una variedad de artículos interesantes donde comparto mis conocimientos y perspectivas sobre diversos temas.",
     href: "#",
-    icon: DocumentTextIcon, // Icono actualizado para representar el blog.
+    icon: DocumentTextIcon,
   },
   {
     name: "Reseñas",
-    description:
-      "Lee reseñas honestas y detalladas sobre productos y servicios relevantes.",
+    description: "Lee reseñas honestas y detalladas sobre productos y servicios relevantes.",
     href: "#",
-    icon: StarIcon, // Icono actualizado para representar las reseñas.
+    icon: StarIcon,
   },
   {
     name: "Metodología",
-    description:
-      "Descubre cómo mi enfoque metodológico puede ayudarte a alcanzar tus metas utilizando herramientas y técnicas efectivas.",
+    description: "Descubre cómo mi enfoque metodológico puede ayudarte a alcanzar tus metas utilizando herramientas y técnicas efectivas.",
     href: "#",
-    icon: CogIcon, // Icono actualizado para representar la metodología.
+    icon: CogIcon,
   },
   {
     name: "Talleres",
-    description:
-      "Participa en talleres interactivos diseñados para mejorar tus habilidades y profundizar en temas específicos.",
+    description: "Participa en talleres interactivos diseñados para mejorar tus habilidades y profundizar en temas específicos.",
     href: "#",
-    icon: PresentationChartLineIcon, // Icono actualizado para representar los talleres.
+    icon: PresentationChartLineIcon,
   },
 ];
 
@@ -56,64 +53,53 @@ const callsToAction = [
   { name: "Demo", href: "#", icon: PlayCircleIcon },
   { name: "Contáctame", href: "#", icon: PhoneIcon },
 ];
-const company = [
-  {
-    name: "About us",
-    href: "#",
-    description:
-      "Learn more about our company values and mission to empower others",
-  },
-  {
-    name: "Careers",
-    href: "#",
-    description:
-      "Looking for you next career opportunity? See all of our open positions",
-  },
-  {
-    name: "Support",
-    href: "#",
-    description:
-      "Get in touch with our dedicated support team or reach out on our community forums",
-  },
-  {
-    name: "Blog",
-    href: "#",
-    description:
-      "Read our latest announcements and get perspectives from our team",
-  },
-];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="bg-transparent fixed top-0 w-full z-50">
+    <header
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        isScrolled ? "bg-white text-black to-transparent backdrop-blur-md" : "bg-transparent"
+      }`}
+    >
       <nav
         aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8 lg:py-2 max-md:px-0 max-md:justify-center"
       >
         <div className="flex items-center gap-8">
           <a href="#" className="-m-1.5 p-1.5 flex items-center gap-x-2">
             <img
               alt="Logo"
               src="assets/logo/logo.svg"
-              className="h-16 w-auto"
+              className="h-16 w-auto max-md:h-12"
             />
           </a>
         </div>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          {/* Mueve el menú al lado izquierdo */}
           <PopoverGroup className="hidden lg:flex lg:gap-x-8">
             <Popover className="relative">
-              <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white">
+              <PopoverButton className={`flex items-center gap-x-1 text-sm/6 font-semibold ${
+                isScrolled ? "text-gray-900" : "text-white"
+              }`}>
                 Cursos
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="size-5 flex-none text-gray-400"
-                />
+                <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
               </PopoverButton>
-
               <PopoverPanel
                 transition
                 className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
@@ -143,135 +129,26 @@ export default function Header() {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                  {callsToAction.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-white hover:bg-gray-100"
-                    >
-                      <item.icon
-                        aria-hidden="true"
-                        className="size-5 flex-none text-gray-400"
-                      />
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
               </PopoverPanel>
             </Popover>
-            <a
-              href="#quiensoy"
-              className="text-sm/6 font-semibold text-white"
-            >
-              ¿Quién soy?
+            <a href="#quiensoy" className={`text-sm/6 font-semibold ${isScrolled ? "text-gray-900" : "text-white"}`}>
+              ¿Quién Soy?
             </a>
-            <a
-              href="#proposito"
-              className="text-sm/6 font-semibold text-white"
-            >
-              ¿Cuál es mi propósito?
+            <a href="#proposito" className={`text-sm/6 font-semibold ${isScrolled ? "text-gray-900" : "text-white"}`}>
+              ¿Cuál es Mi Propósito?
             </a>
-
-            <a
-              href="#testimonios"
-              className="text-sm/6 font-semibold text-white"
-            >
+            <a href="#testimonios" className={`text-sm/6 font-semibold ${isScrolled ? "text-gray-900" : "text-white"}`}>
               Testimonios
             </a>
-            <a
-              href="#contacto"
-              className="text-sm/6 font-semibold text-white"
-            >
+            <a href="#contacto" className={`text-sm/6 font-semibold ${isScrolled ? "text-gray-900" : "text-white"}`}>
               Contacto
             </a>
           </PopoverGroup>
-
-          <a href="/login" className="text-sm/6 m-s-b bg-[#F0F99D] px-8 ml-6 rounded-md">
-            Log in
+          <a href="/login" className="text-sm/6 m-m bg-[#F0F99D] px-8 py-1 ml-6 rounded-md">
+            Sistema Pioneers
           </a>
         </div>
       </nav>
-
-      {/* Mobile Menu */}
-      <Dialog
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}
-        className="lg:hidden"
-      >
-        <div className="fixed inset-0 z-10" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-10 flex w-full flex-col justify-between overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="p-6">
-            <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5">
-                <img
-                  alt=""
-                  src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                  className="h-8 w-auto"
-                />
-              </a>
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="-m-2.5 rounded-md p-2.5 text-gray-700"
-              >
-                <XMarkIcon aria-hidden="true" className="size-6" />
-              </button>
-            </div>
-            <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-gray-500/10">
-                <div className="space-y-2 py-6">
-                  {products.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="group -mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      <div className="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                        <item.icon
-                          aria-hidden="true"
-                          className="size-6 text-gray-600 group-hover:text-indigo-600"
-                        />
-                      </div>
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-                <div className="space-y-2 py-6">
-                  {company.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-                <div className="py-6">
-                  <a
-                    href="/login"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                  >
-                    Log in
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="sticky bottom-0 grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50 text-center">
-            {callsToAction.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-100"
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
-        </DialogPanel>
-      </Dialog>
     </header>
   );
 }

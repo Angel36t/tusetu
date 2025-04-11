@@ -9,16 +9,20 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [themeMode, setThemeMode] = useState(() => {
+    return localStorage.getItem("themeMode") || "solid";
+  });
+
   const login = async (email, password, rememberMe) => {
     try {
-      const {id, user_name, position } = await loginService(
-        email,
-        password
-      );
-      
-      const userInfo = {email, name: user_name, position, id };
+      const { id, user_name, position } = await loginService(email, password);
 
-      localStorage.setItem("authData", JSON.stringify({id, email, password, position }));
+      const userInfo = { email, name: user_name, position, id };
+
+      localStorage.setItem(
+        "authData",
+        JSON.stringify({ id, email, password, position })
+      );
 
       setUser(userInfo);
       return userInfo;
@@ -52,6 +56,11 @@ export const UserProvider = ({ children }) => {
     checkAuthData();
   }, []);
 
+  // Este effect guarda el themeMode en el localStorage cada vez que cambia
+  useEffect(() => {
+    localStorage.setItem("themeMode", themeMode);
+  }, [themeMode]);
+
   return (
     <UserContext.Provider
       value={{
@@ -59,6 +68,8 @@ export const UserProvider = ({ children }) => {
         login,
         logout,
         loading,
+        themeMode,
+        setThemeMode,
       }}
     >
       {children}

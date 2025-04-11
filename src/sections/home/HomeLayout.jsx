@@ -20,10 +20,10 @@ export default function HomeLayout() {
       <HeroesTwo />
       {/* <HeroesBackground /> */}
       <WhoAmI />
+      <MyPurpose />
+      <Methodology />
       <PriceComparison />
       <Testimonials />
-      <Methodology />
-      <MyPurpose />
       <Teachers />
       <ContactUs />
       <Footer />

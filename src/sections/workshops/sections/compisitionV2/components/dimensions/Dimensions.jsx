@@ -29,7 +29,6 @@ export default function Dimensions() {
   };
 
   const handleSave = () => {
-    console.log('Datos guardados:', data);
     alert('Datos guardados correctamente');
   };
 

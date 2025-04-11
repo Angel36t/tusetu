@@ -9,6 +9,7 @@ export default {
       // COLOR
       colors: {
         transparent: "transparent",
+        yellow: "#EEFD64",
         black: "#1E1E1E",
         gry: {
           20: "#F7F8F9",
@@ -62,7 +63,7 @@ export default {
 
       // FONT SIZE
       fontSize: {
-        "fs-4":"0.3rem",
+        "fs-4": "0.3rem",
         "fs-8": "0.5rem",
         "fs-9": "0.5625rem",
         "fs-10": "0.625rem",

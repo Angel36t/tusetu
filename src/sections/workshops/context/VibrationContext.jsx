@@ -1,194 +1,70 @@
 import React, { createContext, useState, useEffect } from "react";
-import { useUser } from "../../../context/UserContext";
-import { getUserProgress } from "../sections/composition/api/api";
-import { SummaryValues } from "../sections/composition/components/summary/SummaryValues";
-import DominantValue from "../sections/composition/components/dominantValue/DominantValue";
-import MyStoryComponent from "../sections/composition/components/myStory/MyStoryComponent";
-import SelectValuesGrid from "../sections/composition/components/ToggleValueSelection";
-import SecondaryValues from "../sections/composition/secondaryValues/SecondaryValues";
+import vibrationCourseTemplate from "../sections/composition/config/vibrationCourseTemplate";
 
-export const VibrationContext = createContext({
-  steps: [],
-  activeStep: null,
-  completeStep: () => {},
-  setActiveStep: () => {},
-  progressData: null,
-  records: null,
-  setRecords: () => {},
-});
+export const VibrationContext = createContext({});
 
 export const VibrationProvider = ({ children }) => {
-  const { user } = useUser();
-  const [steps, setSteps] = useState([]);
-  const [records, setRecords] = useState(null);
-  const [activeStep, setActiveStep] = useState(null);
-  const [progressData, setProgressData] = useState(null);
+  const [sections, setSections] = useState(vibrationCourseTemplate);
+  const flatLessons = sections.flatMap((section) => section.lessons);
 
-  const stepsDataTemplate = [
-    {
-      id: 1,
-      label: "Explora y Analiza los Valores",
-      icon: "StarIcon",
-      completed: false,
-      status: "Pendiente",
-      component: () => <SummaryValues />,
-    },
-    {
-      id: 2,
-      label: "Selecciona 10 valores principales",
-      icon: "LinkIcon",
-      completed: false,
-      status: "Pendiente",
-      component: () => <SelectValuesGrid />,
-    },
-    {
-      id: 3,
-      label: "Tabla de captura de valores",
-      icon: "DocumentTextIcon",
-      completed: false,
-      status: "Pendiente",
-      component: () => <SecondaryValues />,
-    },
-    {
-      id: 4,
-      label: "Selecciona el valor dominante",
-      icon: "DocumentTextIcon",
-      completed: false,
-      status: "Pendiente",
-      component: () => <DominantValue />,
-    },
-    {
-      id: 5,
-      label: "Escribe tu historia",
-      icon: "DocumentTextIcon",
-      completed: false,
-      status: "Pendiente",
-      component: () => <MyStoryComponent />,
-    },
-  ];
+  // Función para encontrar la lección inicial basada en la URL
+  const getInitialLesson = () => {
+    const params = new URLSearchParams(window.location.search);
+    const lessonId = params.get("lessonId");
+    if (lessonId) {
+      const lessonFound = flatLessons.find(lesson => lesson.id === Number(lessonId));
+      if (lessonFound) {
+        return lessonFound;
+      }
+    }
+    return flatLessons[0]; // Si no hay lessonId o no se encuentra
+  };
 
-  const defaultProgress = {
-    levels: [
-      {
-        level: 1,
-        title: "Explore and Analyze Values",
-        completed: false,
-        percentage: 0,
-      },
-      {
-        level: 2,
-        title: "Select 10 Main Values",
-        completed: false,
-        percentage: 0,
-      },
-      {
-        level: 3,
-        title: "Value Capture Table",
-        completed: false,
-        percentage: 0,
-      },
-      {
-        level: 4,
-        title: "Select the Dominant Value",
-        completed: false,
-        percentage: 0,
-      },
-      { level: 5, title: "Write Your Story", completed: false, percentage: 0 },
-    ],
-    overall_percentage: 20,
+  const [activeLesson, setActiveLessonState] = useState(getInitialLesson);
+  const [completedLessons, setCompletedLessons] = useState(() => {
+    const saved = localStorage.getItem("completedLessons");
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+  const [isCreative, setIsCreative] = useState(false);
+
+  const completeLesson = (lessonId) => {
+    if (!completedLessons.includes(lessonId)) {
+      setCompletedLessons((prev) => [...prev, lessonId]);
+    }
+  };
+
+  const totalLessons = flatLessons.length;
+  const courseProgress = completedLessons.length / totalLessons;
+
+  // Actualizar URL cuando cambie la lección activa
+  const setActiveLesson = (lesson) => {
+    setActiveLessonState(lesson);
+    const params = new URLSearchParams(window.location.search);
+    params.set("lessonId", lesson.id);
+    window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = user.id;
-        const data = await getUserProgress(userId);
-        setProgressData(data.data.progress);
+    // Opcional: Si quieres guardar en localStorage el último visto
+    localStorage.setItem("lastLessonId", activeLesson.id);
+  }, [activeLesson]);
 
-        const updatedSteps = stepsDataTemplate.map((step) => {
-          const levelData = data.data.progress.levels.find(
-            (level) => level.level === step.id
-          );
-
-          return levelData
-            ? {
-                ...step,
-                completed: levelData.completed,
-                status: levelData.completed
-                  ? "Completado"
-                  : step.status === "En progreso"
-                  ? "En progreso"
-                  : "Pendiente",
-              }
-            : step;
-        });
-
-        setSteps(updatedSteps);
-
-        const active =
-          updatedSteps.find((step) => step.status === "En progreso") ||
-          updatedSteps[0];
-        setActiveStep(active);
-      } catch (error) {
-        console.error("Error fetching progress data:", error);
-
-        if (error.response && error.response.status === 404) {
-          setProgressData(defaultProgress);
-
-          const updatedSteps = stepsDataTemplate.map((step) => {
-            const levelData = defaultProgress.levels.find(
-              (level) => level.level === step.id
-            );
-
-            return levelData
-              ? {
-                  ...step,
-                  completed: levelData.completed,
-                  status: levelData.completed
-                    ? "Completado"
-                    : step.status === "En progreso"
-                    ? "En progreso"
-                    : "Pendiente",
-                }
-              : step;
-          });
-
-          setSteps(updatedSteps);
-          setActiveStep(updatedSteps[0]);
-        }
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const completeStep = (stepId) => {
-    setSteps((prevSteps) =>
-      prevSteps.map((step) =>
-        step.id === stepId
-          ? { ...step, completed: true, status: "Completado" }
-          : step.id === stepId + 1
-          ? { ...step, status: "En progreso" }
-          : step
-      )
-    );
-
-    const nextStep = steps.find((step) => step.id === stepId + 1);
-    if (nextStep) {
-      setActiveStep(nextStep);
-    }
-  };
+  useEffect(() => {
+    localStorage.setItem("completedLessons", JSON.stringify(completedLessons));
+  }, [completedLessons]);
 
   return (
     <VibrationContext.Provider
       value={{
-        steps,
-        activeStep,
-        completeStep,
-        setActiveStep,
-        progressData,
-        records,
-        setRecords,
+        sections,
+        activeLesson,
+        setActiveLesson,
+        completeLesson,
+        completedLessons,
+        totalLessons,
+        courseProgress,
+        isCreative,
       }}
     >
       {children}

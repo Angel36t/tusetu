@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import BadgeList from "./BadgeList";
 import { WorkshopCard } from "./Workshops";
 import { useUser } from "../../context/UserContext";
+import TopBarHome from "../../components/sidebar/TopBarHome";
+
 
 export default function WelcomeLayout() {
   const { user } = useUser();
@@ -79,7 +81,9 @@ export default function WelcomeLayout() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#f7f9fa] relative">
+    <>
+    <TopBarHome/>
+    <div className="flex flex-col items-center justify-center min-h-screen relative">
       <div className="absolute top-8 left-8 flex flex-col gap-2">
         <div className="flex items-center gap-4">
           <h1 className="text-4xl font-bold text-gray-800">
@@ -101,5 +105,6 @@ export default function WelcomeLayout() {
       <WorkshopCard />
       <BadgeList />
     </div>
+    </>
   );
 }

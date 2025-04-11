@@ -4,9 +4,12 @@ import React from "react";
 import NotFound from "../404/NotFound";
 import Sidebar from "../sidebar/Sidebar";
 import { PhatRoutings } from "../../routes/ConfigsRouting";
+import { useUser } from "../../context/UserContext";
 
 const DashboardLayout = () => {
   const routes = PhatRoutings();
+  const { themeMode } = useUser();
+  const isCreative = themeMode === "creative";
 
   // Simulación del rol del usuario actual
   const userRole = "admin";
@@ -16,7 +19,20 @@ const DashboardLayout = () => {
       {/* Sidebar */}
       <Sidebar />
 
-      <div className="w-full p-2.5 flex-grow">
+      <div
+        className={`w-full flex-grow bg-[#d9d7bf] ${
+          isCreative ? "" : "bg-[#d9d7bf]"
+        }`}
+        style={
+          isCreative
+            ? {
+                backgroundImage: "url('/plataforma/background.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : {}
+        }
+      >
         <Routes>
           {routes.map((route, index) => {
             if (route.allowedRoles.includes(userRole)) {

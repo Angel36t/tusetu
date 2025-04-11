@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { getLifeHistory, getUserMainValues, saveLifeHistory } from "../../api/api";
+import {
+  getLifeHistory,
+  getUserMainValues,
+  saveLifeHistory,
+} from "../../api/api";
 import CongratulationsMyStory from "./CongratulationsMyStory";
 import { useUser } from "../../../../../../context/UserContext";
 
@@ -101,10 +105,15 @@ const MyStoryComponent = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg mt-10">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
-        Escribe tu historia
-      </h1>
+    <div className="mx-auto p-6  rounded-lg bg-[#F8F2E2] ">
+      <div className="bg-[#F7E9BA] p-4 rounded-md my-6">
+        <h2 className="text-fs-18 text-center mb-4 o-b">Escribe tu historia</h2>
+        <p className="text-center text-fs-14">
+          Lorem ipsum dolor sit amet consectetur. Maecenas vestibulum congue
+          pellentesque porta sed scelerisque. Bibendum nisl varius ligula lacus.
+        </p>
+      </div>
+
 
       {/* Congratulations Message */}
       {showCongratulations && (
@@ -115,37 +124,81 @@ const MyStoryComponent = () => {
 
       {/* Display Used Values */}
       <div className="flex flex-wrap justify-center gap-2 mb-8">
-        {mainValues.map((value, index) => (
-          <div
-            key={index}
-            className={`flex items-center px-4 py-2 rounded-lg shadow-sm font-medium text-sm ${
-              usedValues.includes(value)
-                ? "bg-blue-100 text-blue-700"
-                : "bg-gray-100 text-gray-600"
-            }`}
-          >
-            <span className="mr-2">
-              {usedValues.includes(value) ? "🌟" : "✨"}
-            </span>
-            {value}
-          </div>
-        ))}
+        {mainValues.map((value, index) => {
+          const isUsed = usedValues.includes(value);
+
+          return (
+            <div
+              key={index}
+              className={`w-36 flex items-center justify-center gap-2 px-4 py-2 rounded-xl o-b text-sm border text-center
+          ${
+            isUsed
+              ? "bg-teal-600 text-white border-transparent"
+              : "bg-transparent text-[#7C6D4C] border-[#7C6D4C]"
+          }
+        `}
+            >
+              <span className="text-base">{isUsed ? "✨" : "★"}</span>
+              <span>{value}</span>
+            </div>
+          );
+        })}
       </div>
 
       {/* Text Area for Story Input */}
-      <textarea
-        value={story}
-        onChange={handleStoryChange}
-        placeholder="Escribe tu historia aquí (máximo 3000 palabras)"
-        rows="10"
-        className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-gray-700 text-lg mb-4"
-      />
-      <p className="text-right text-gray-600 mt-2 mb-4">
-        Palabras:{" "}
-        <span
-          className={wordCount > 3000 ? "text-red-600" : ""}
-        >{`${wordCount}/3000`}</span>
-      </p>
+      <div className="relative bg-white border border-gray-300 rounded-lg p-4 shadow-sm overflow-hidden w-full">
+        {/* Cuadrícula más grande */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          {Array.from({ length: 30 }).map((_, rowIndex) => (
+            <div
+              key={`row-${rowIndex}`}
+              className="absolute left-0 w-full border-b border-gray-200"
+              style={{ top: `${rowIndex * 36}px` }} // Altura: 36px
+            />
+          ))}
+          {Array.from({ length: 40 }).map((_, colIndex) => (
+            <div
+              key={`col-${colIndex}`}
+              className="absolute top-0 h-full border-l border-gray-200"
+              style={{ left: `${colIndex * 36}px` }} // Ancho: 36px
+            />
+          ))}
+        </div>
+
+        {/* Círculos ajustados */}
+        <div className="absolute top-6 bottom-6 left-2 flex flex-col justify-between z-10">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="w-3 h-3 rounded-full bg-gray-300 opacity-70"
+              style={{ marginTop: i === 0 ? 0 : "48px" }} // Más espacio entre ellos
+            />
+          ))}
+        </div>
+
+        {/* Contenido ajustado */}
+        <div className="relative z-20 pl-16">
+          <div className="relative left-[-33px] bottom-[-30px]">
+            <img src="/icon/pencil.svg" />
+          </div>
+
+          <textarea
+            value={story}
+            onChange={handleStoryChange}
+            placeholder="Escribe tu historia aquí..."
+            rows="10"
+            className="o-m w-full bg-transparent resize-none focus:outline-none text-gray-800 text-base leading-[36px] tracking-wide"
+          />
+        </div>
+
+        <p className="relative z-20 text-right text-sm text-gray-600 mt-2">
+          Palabras:{" "}
+          <span className={wordCount > 3000 ? "text-red-600" : ""}>
+            {wordCount}/3000
+          </span>
+        </p>
+      </div>
+
       {wordCount > 3000 && (
         <p className="text-red-600 text-sm text-center mt-1 mb-4">
           Ha alcanzado el límite de 3000 palabras.
@@ -156,7 +209,7 @@ const MyStoryComponent = () => {
       <div className="flex justify-center mt-4">
         <button
           onClick={handleSaveStory}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-lg transition duration-200"
+          className="mt-10 bg-[#DAE462] w-b text-[#2F2F2F] rounded-md text-sm border-r-[4px] border-b-[4px] border-[#C5CD59] shadow-[2px_2px_4px_rgba(0,0,0,0.1)] hover:bg-[#cbdc50] transition duration-200 py-[12px] px-[52px]"
         >
           Guardar historia
         </button>

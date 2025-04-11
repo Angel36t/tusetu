@@ -9,7 +9,7 @@ function SecondaryValues() {
   const { isSaved } = useSecondaryValues();
 
   return (
-    <div className="overflow-x-auto max-w-5xl mx-auto mt-8 px-4">
+    <div className="overflow-x-auto max-w-5xl mx-auto pt-2 px-4">
       {isSaved ? <CongratulationsSecondary /> : <SecondaryValuesTable />}
     </div>
   );
