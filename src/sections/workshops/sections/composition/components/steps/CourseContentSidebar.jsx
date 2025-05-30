@@ -1,13 +1,15 @@
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
-
 import { useUser } from "../../../../../../context/UserContext";
+import { useContext } from "react";
+import { VibrationContext } from "../../../../context/VibrationContext";
+// import { VibrationContext } from "../../../../context/VibrationContext";
 
-export default function CourseContentSidebar({
-  sections,
-  activeLesson,
-  setActiveLesson,
-}) {
+export default function CourseContentSidebar() {
+  const { sections, activeLesson, setActiveLesson } =
+    useContext(VibrationContext);
+  const { themeMode } = useUser();
+  const isCreative = themeMode === "creative";
 
   const getIconByType = (type) => {
     switch (type) {
@@ -23,9 +25,6 @@ export default function CourseContentSidebar({
         return "/icon/default.svg";
     }
   };
-
-  const { themeMode } = useUser();
-  const isCreative = themeMode === "creative";
 
   return (
     <div
@@ -57,9 +56,7 @@ export default function CourseContentSidebar({
           <Disclosure key={section.id} defaultOpen>
             {({ open }) => (
               <div className="rounded-md">
-                <Disclosure.Button
-                  className="w-full w-s-b flex justify-between items-center px-3 py-2 font-medium text-gray-700 bg-gray-100 rounded-t-md"
-                >
+                <Disclosure.Button className="w-full w-s-b flex justify-between items-center px-3 py-2 font-medium text-gray-700 bg-gray-100 rounded-t-md">
                   <span>{section.title}</span>
                   <div className="flex items-center space-x-2">
                     <span className="text-xs text-gray-600">

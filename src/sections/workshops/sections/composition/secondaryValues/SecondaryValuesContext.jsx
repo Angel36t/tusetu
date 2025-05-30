@@ -20,6 +20,7 @@ export const SecondaryValuesProvider = ({ children }) => {
   const [selectedMainValue, setSelectedMainValue] = useState(null);
   const [selectedValues, setSelectedValues] = useState([]);
   const [dominantValue, setDominantValue] = useState(null);
+  const [needsMainValues, setNeedsMainValues] = useState(false);
 
   const userId = user.id;
 
@@ -29,26 +30,36 @@ export const SecondaryValuesProvider = ({ children }) => {
         // 1. Obtener los valores principales
         const mainValuesData = await getUserMainValues(userId);
         const mainValuesNames = mainValuesData.map((item) => item.name);
+
+        if (mainValuesNames.length !== 10) {
+          setNeedsMainValues(true);
+          return; // Nos salimos temprano
+        }
+
         setMainValues(mainValuesNames);
 
-        try {
-          // 2. Intentar obtener las asignaciones principales-secundarias
-          const secondaryValuesData = await getPrimarySecondaryValues(userId);
-          if (
-            secondaryValuesData &&
-            secondaryValuesData.data &&
-            secondaryValuesData.data.values
-          ) {
-            setAssignments(secondaryValuesData.data.values);
-          } else {
-            throw new Error("No secondary values found");
-          }
-        } catch (error) {
-          // Si no hay datos secundarios, inicializar con estructura vacía
-          console.warn(
-            "No se encontraron valores secundarios, inicializando vacíos:",
-            error.message
-          );
+        // 2. Obtener las asignaciones principales-secundarias
+        const secondaryValuesData = await getPrimarySecondaryValues(userId);
+
+        if (
+          secondaryValuesData &&
+          secondaryValuesData.data &&
+          secondaryValuesData.data.values
+        ) {
+          // 3. Filtrar SOLO si tenemos mainValues cargados
+          const filteredAssignments = mainValuesNames.reduce((acc, value) => {
+            if (secondaryValuesData.data.values[value]) {
+              acc[value] = secondaryValuesData.data.values[value];
+            } else {
+              // si no existe, inicializamos vacío
+              acc[value] = { dominant: null, secondaryValues: [] };
+            }
+            return acc;
+          }, {});
+
+          setAssignments(filteredAssignments);
+        } else {
+          // Si no hay datos secundarios, inicializar vacíos
           const initialAssignments = mainValuesNames.reduce((acc, value) => {
             acc[value] = { dominant: null, secondaryValues: [] };
             return acc;
@@ -56,10 +67,12 @@ export const SecondaryValuesProvider = ({ children }) => {
           setAssignments(initialAssignments);
         }
       } catch (error) {
-        console.error(
-          "Error al obtener los valores principales o secundarios:",
-          error
-        );
+        if (
+          error?.response?.data?.message ===
+          "The user does not have exactly 10 main values."
+        ) {
+          setNeedsMainValues(true);
+        }
       }
     };
 
@@ -99,7 +112,6 @@ export const SecondaryValuesProvider = ({ children }) => {
       };
 
       await registerPrimarySecondaryValues(userId, updatedAssignments);
-
     } catch (error) {
       console.error("Error al registrar los valores:", error);
     } finally {
@@ -166,6 +178,8 @@ export const SecondaryValuesProvider = ({ children }) => {
         allSelectedValues,
         setSelectedValues,
         setDominantValue,
+        needsMainValues,
+        setNeedsMainValues,
       }}
     >
       {children}

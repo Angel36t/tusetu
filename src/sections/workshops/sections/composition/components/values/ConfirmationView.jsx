@@ -88,10 +88,10 @@ export const ConfirmationView = ({ confirmSelection }) => {
         <div className="flex justify-center mt-6">
         <button
           onClick={submitValues}
-          disabled={isButtonDisabled}
+          // disabled={isButtonDisabled}
           className={`px-5 py-2 font-semibold rounded-md transition-all duration-150 ease-in-out ${
             isButtonDisabled
-              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              ? "bg-gray-400 text-gray-200"
               : "bg-green-500 text-white hover:bg-green-600"
           }`}
         >

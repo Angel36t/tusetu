@@ -6,6 +6,7 @@ import AuthGuard from "./config/login/AuthGuard";
 import HomeLayout from "./sections/home/HomeLayout";
 import { UserProvider } from "./context/UserContext";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
+import QrRedirect from "./components/qr/QrRedirect";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             {/* Rutas públicas */}
             <Route path="/" element={<HomeLayout />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/qr" element={<QrRedirect />} />
 
             {/* Rutas protegidas */}
             <Route

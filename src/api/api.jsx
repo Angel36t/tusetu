@@ -8,3 +8,16 @@ export const loginService = async (email, password) => {
   const response = await API.post("/users/login", { email, password });
   return response.data;
 };
+
+export const registerProspect = async (formData) => {
+  const response = await API.post("/prospects", formData);
+  return response.data;
+};
+
+export const validateProspectCode = async (email, code) => {
+  const response = await API.post("/prospects/validate-code", {
+    email,
+    code,
+  });
+  return response.data;
+};

@@ -1,17 +1,16 @@
+import { useState } from "react";
 import {
   ChevronLeftIcon,
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
+
 import { useUser } from "../../context/UserContext";
-import { useState } from "react";
 
 export default function TopBarVibration() {
   const navigate = useNavigate();
   const { user } = useUser();
 
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showChatbot, setShowChatbot] = useState(false);
-
 
   return (
     <div className="w-full flex justify-between items-center bg-[#fdf9ed] px-4 py-3 shadow-sm relative">

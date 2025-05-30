@@ -2,16 +2,14 @@ import React, { useContext } from "react";
 import { VibrationContext } from "../../../../context/VibrationContext";
 
 export default function CourseProgress() {
-  const {
-    activeLesson,
-    sections,
-    setActiveLesson,
-    completeLesson,
-  } = useContext(VibrationContext);
+  const { activeLesson, sections, setActiveLesson, completeLesson } =
+    useContext(VibrationContext);
 
   // Se obtiene el arreglo plano de lecciones a partir de las secciones
-  const flatLessons = sections.flatMap((section) => section.lessons);
-  
+  const flatLessons = Array.isArray(sections)
+    ? sections.flatMap((section) => section.lessons)
+    : [];
+
   // Se encuentra el índice de la lección activa en el arreglo plano
   const currentIndex = flatLessons.findIndex(
     (lesson) => lesson.id === activeLesson?.id
@@ -43,11 +41,7 @@ export default function CourseProgress() {
     <div className="bg-[#F8F6E7] rounded-xl py-4 px-8 shadow-sm flex flex-col gap-4">
       {/* Título con ícono */}
       <div className="flex items-center gap-2 justify-center text-sm font-semibold text-gray-700">
-        <img
-          className="w-6 h-6"
-          src="/icon/circle-star.svg"
-          alt="Progreso"
-        />
+        <img className="w-6 h-6" src="/icon/circle-star.svg" alt="Progreso" />
         <span>Tu progreso</span>
       </div>
 

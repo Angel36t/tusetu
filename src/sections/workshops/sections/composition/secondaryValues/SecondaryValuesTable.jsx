@@ -1,8 +1,12 @@
-import React from "react";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { DialogSecondaryValues } from "./DialogSecondaryValues";
+import {
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
+
 import { useSecondaryValues } from "./SecondaryValuesContext";
+import { DialogSecondaryValues } from "./DialogSecondaryValues";
 import SecondaryValuesSkeleton from "../components/skeleton/SecondaryValuesSkeleton";
+import ErrorAlertSection from "../components/alerts/ErrorAlertSection";
 
 const SecondaryValuesTable = () => {
   const {
@@ -13,13 +17,17 @@ const SecondaryValuesTable = () => {
     openDialog,
     allMainValuesHaveSelections,
     handleSaveAllAssignments,
+    needsMainValues,
   } = useSecondaryValues();
 
+  console.log(mainValues);
+  
 
-  if (
-    mainValues.length === 0 ||
-    Object.keys(assignments).length === 0
-  ) {
+  if (needsMainValues) {
+    return <ErrorAlertSection />;
+  }
+
+  if (mainValues.length === 0 || Object.keys(assignments).length === 0) {
     return <SecondaryValuesSkeleton />;
   }
 
@@ -30,13 +38,12 @@ const SecondaryValuesTable = () => {
           Elige tus valores secundarios
         </h2>
         <p className="text-center text-fs-14">
-          Puedes seleccionar hasta <span className="o-b">máximo 7 valores</span>{" "}
+          Puedes seleccionar hasta <span className="o-b">máximo 8 valores</span>{" "}
           secundarios por cada valor principal.
         </p>
       </div>
 
       <div className="border-t-2 border-[#BEB79B] shadow-sm w-full my-6" />
-
 
       <table className="w-full bg-white text-sm text-left text-gray-800 rounded-xl overflow-hidden">
         <thead>
@@ -103,16 +110,16 @@ const SecondaryValuesTable = () => {
         </tbody>
       </table>
 
-      {allMainValuesHaveSelections && (
-        <div className="mt-6 flex justify-center">
-          <button
-            onClick={handleSaveAllAssignments}
-            className="px-6 py-2 bg-green-600 text-white rounded-md text-sm font-semibold hover:bg-green-700 transition"
-          >
-            Guardar Valores Secundarios
-          </button>
-        </div>
-      )}
+      {/* {allMainValuesHaveSelections && ( */}
+      <div className="mt-6 flex justify-center">
+        <button
+          onClick={handleSaveAllAssignments}
+          className="px-6 py-2 bg-green-600 text-white rounded-md text-sm font-semibold hover:bg-green-700 transition"
+        >
+          Guardar Valores Secundarios
+        </button>
+      </div>
+      {/* )} */}
 
       <DialogSecondaryValues />
     </>

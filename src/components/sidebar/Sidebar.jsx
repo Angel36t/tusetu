@@ -12,7 +12,7 @@ import { useUser } from "../../context/UserContext";
 
 function Sidebar() {
   const location = useLocation();
-  const { themeMode, setThemeMode } = useUser();
+  const { themeMode, setThemeMode, logout  } = useUser();
   const [collapsed, setCollapsed] = useState(false);
   const toggleCollapse = () => setCollapsed(!collapsed);
 
@@ -154,7 +154,7 @@ function Sidebar() {
 
         {/* Logout */}
         <button
-          onClick={() => console.log("logout")}
+          onClick={logout}
           className="flex items-center justify-center w-full p-2 bg-[#EFE8DC] text-[#7C6D4C] rounded-lg text-sm hover:bg-[#E0D6C7] transition-all"
         >
           <ArrowLeftEndOnRectangleIcon className="w-5 h-5 mr-2" />

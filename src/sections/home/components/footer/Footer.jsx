@@ -62,7 +62,10 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="max-md:pt-[21rem] bg-white" style={{ backgroundImage: "url('/bg/Footer.svg')" }}>
+    <footer
+      className="max-md:pt-[21rem] bg-white"
+      style={{ backgroundImage: "url('/bg/Footer.svg')" }}
+    >
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
         <nav
           aria-label="Footer"
@@ -92,9 +95,22 @@ export default function Footer() {
             </a>
           ))}
         </div>
-        <p className="mt-10 text-center text-sm/6 text-gray-600 o-m">
-          &copy; 2024 Angel Bastian. All rights reserved.
-        </p>
+        <div className="mt-10 flex items-center justify-center gap-2 text-sm text-gray-600">
+          <span>Hecho por</span>
+          <a
+            href="https://bastiansoft.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:text-[#DAE562]"
+          >
+            <img
+              src="https://bastiansoft.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1_Logo_principal_B.80c46580.png&w=3840&q=75"
+              alt="BastianSoft"
+              className="h-6"
+            />
+            <span className="sr-only">BastianSoft</span>
+          </a>
+        </div>
       </div>
     </footer>
   );

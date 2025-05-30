@@ -7,12 +7,11 @@ import { VibrationContext } from "../../../../context/VibrationContext";
 import TopBarVibration from "../../../../../../components/sidebar/TopBarVibration";
 
 export default function VibrationCourseLayout() {
-  const {
-    sections,
-    activeLesson,
-    setActiveLesson,
-    isCreative,
-  } = useContext(VibrationContext);
+  const { sections, activeLesson, setActiveLesson } =
+    useContext(VibrationContext);
+
+  const { themeMode } = useUser();
+  const isCreative = themeMode === "creative";
 
   return (
     <>

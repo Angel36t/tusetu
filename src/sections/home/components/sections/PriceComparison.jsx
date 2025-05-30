@@ -25,7 +25,7 @@ const tiers = [
     module: "(Módulos 2)",
     btn: "QUIERO RECONOCER MI IDENTIDAD",
     priceMonthly: "$197",
-    href: "#",
+    href: "#prices",
     high: "Sigue tu Transformación con:",
     highlights: [
       { description: "6 Dimensiones del Ser Humano" },
@@ -41,7 +41,7 @@ const tiers = [
     module: "(Módulos  3)",
     btn: "QUIERO EDIFICAR MI SER",
     priceMonthly: "$247",
-    href: "#",
+    href: "#prices",
     high: "Compromete a Cambiar tu VIDA:",
     highlights: [
       { description: "Materializa tu Visión con tu Misión" },
@@ -71,7 +71,7 @@ export default function PriceComparison() {
     <PriceComparisonMobile tiers={tiers} />
   ) : (
     <div
-      // className="relative overflow-hidden text-white p-10 h-[164vh] py-20"
+      id="prices"
       className="relative bg-white py-24 sm:py-32 h-[90rem] bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/bg/pricing-section-background 1.svg')" }}
     >
@@ -88,55 +88,6 @@ export default function PriceComparison() {
         <h1 className="text-balance p-4 text-6xl p-m text-[#33AAC5] tracking-tight text-center sm:text-4xl lg:text-pretty">
           tú sé tú
         </h1>
-      </div>
-      <div className="mx-auto max-w-7xl py-16 sm:px-6 sm:pt-10 lg:px-8 max-md:px-0">
-        <div className="relative isolate overflow-hidden bg-gray-900/15 backdrop-blur-2xl px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-0 md:pt-0 lg:flex lg:items-center lg:gap-x-20 lg:px-16 lg:pt-0 max-md:pb-10 max-md:m-6 max-md:pt-4">
-          <div className="relative mt-10 flex justify-center w-full">
-            <iframe
-              width="100%"
-              height="200"
-              src="https://www.youtube.com/embed/3SKTTuf7byw?si=YaO0psHggsK_GISc&amp;controls=0"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-              className="rounded-md bg-white/5 ring-1 ring-white/10 sm:h-64 md:h-72 lg:h-80 xl:h-64"
-            ></iframe>
-          </div>
-
-          <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-10 lg:text-left">
-            <p className="mt-6 text-pretty text-base text-white">
-              Como{" "}
-              <span className="font-bold">
-                psicólogo en corazón e ingeniero de profesión
-              </span>
-              , me he enfocado en transformar conceptos abstractos en
-              herramientas prácticas y funcionales. <br />
-              <br />
-              <span className="font-bold">Miles de horas</span> de
-              autoobservación, contemplación y creación, me llevaron a
-              desarrollar una metodología clara y accionable. <br />
-              <br />
-            </p>
-
-            {/* BOTON  */}
-            <div className="mt-6 flex flex-col items-center gap-y-3 sm:flex-row sm:gap-x-4 sm:justify-center">
-              <a
-                href="#"
-                className="w-full sm:w-auto text-center rounded-md bg-white py-2 px-4 text-xs font-bold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
-                EMPIEZA CON LA METODOLOGÍA
-              </a>
-              <a
-                href="#"
-                className="w-full sm:w-auto text-center text-xs py-2 px-4 font-bold bg-transparent border border-white text-white rounded-md transition-colors duration-300 hover:bg-[#EEFD64] hover:text-black"
-              >
-                APRENDER MÁS
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
 
       <h3 className="text-balance pb-4 text-4xl m-b text-black tracking-tight text-center sm:text-4xl lg:text-pretty">
@@ -164,9 +115,15 @@ export default function PriceComparison() {
                     <p className="text-pretty text-sm/6 text-gray-600 text-center">
                       {tier.description}
                     </p>
-                    <div className={index === 0 ? "" : "blur-sm"}>
+                    <div className={index === 0 ? "" : "blur-sm select-none"}>
                       <div className="mt-8 flex items-center gap-4 m-m justify-center">
-                        <div className={index === 0 ? "text-4xl text-gray-950" : "blur-md text-4xl text-gray-950"}>
+                        <div
+                          className={
+                            index === 0
+                              ? "text-4xl text-gray-950"
+                              : "blur-md text-4xl text-gray-950"
+                          }
+                        >
                           {tier.priceMonthly}
                         </div>
                         <div className="text-sm text-gray-600">
@@ -226,10 +183,10 @@ export default function PriceComparison() {
             {/* Contenido de la izquierda */}
             <div className="flex-1">
               <h2 className="text-3xl m-b text-gray-800">All In One</h2>
-              <h3 className="text-lg o-b mt-4 text-gray-800">
+              <h3 className="text-lg o-b mt-4 text-gray-800 ">
                 Expedición a mi Interior
               </h3>
-              <p className="text-gray-800 text-sm mt-2 max-w-md o-m">
+              <p className="text-gray-800 text-sm mt-2 max-w-md o-m blur-md select-none">
                 Lorem ipsum dolor sit amet consectetur. Nibh odio facilisis nisi
                 id id nibh lobortis viverra facilisis.
               </p>
@@ -267,7 +224,7 @@ export default function PriceComparison() {
             </div>
 
             {/* Sección de precio y botón */}
-            <div className="flex items-center gap-4 mt-6 lg:mt-0">
+            <div className="flex items-center gap-4 mt-6 lg:mt-0 blur-md select-none ">
               <div className="text-right text-gray-800">
                 <span className="text-5xl m-b">$247</span>
                 <span className="text-lg m-m"> USD</span>
@@ -275,7 +232,10 @@ export default function PriceComparison() {
                   (Módulos 1, 2 y 3)
                 </p>
               </div>
-              <a href="#" className="p-4 rounded hover:scale-110 transition">
+              <a
+                href="#"
+                className="p-4 rounded hover:scale-110 transition pointer-events-none"
+              >
                 <img
                   src="/icon/arrow-up-rightT.svg"
                   alt="check alex tu se tu"

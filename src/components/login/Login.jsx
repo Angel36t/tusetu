@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { useUser } from "../../context/UserContext";
 
 function Login() {
@@ -13,40 +12,37 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const userInfo = await login(email, password, rememberMe);
     if (userInfo) {
-      const redirectPath = location.state?.from?.pathname || "/inicio"; // Si no hay una página previa, redirige a /inicio
+      const redirectPath = location.state?.from?.pathname || "/inicio";
       navigate(redirectPath, { replace: true });
     } else {
       console.error("Credenciales incorrectas");
     }
   };
-  
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-[#f7f9fa]">
+    <div className="relative w-full h-screen flex items-center justify-center">
+      {/* Background Image */}
       <div
-        className="w-full h-[35rem] bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: "url('assets/login/background.jpg')" }}
-      >
-        <div className="text-center text-white">
-          <h1 className="text-4xl font-bold pb-6">ALEXANDER ASSAD</h1>
-          <p className="mt-2 pb-6">
-            Mi propósito es ayudarte a experimentar tu <br /> Experiencia Humana
-            llena de BIENESTAR y aprovechando todo tu POTENCIAL
-          </p>
-        </div>
-      </div>
+        className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0"
+        style={{ backgroundImage: "url('assets/login/bg-login.svg')" }}
+      ></div>
 
-      <div className="relative mt-[-12rem] max-w-[26rem] w-full bg-white p-8 shadow-lg rounded-lg">
-        <div className="flex justify-center mb-6">
-          <img src="assets/login/logo.png" alt="Logo" className="w-26 h-24" />
+      {/* Overlay to darken image slightly */}
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40 z-0"></div>
+
+      {/* Login Form */}
+      <div className="relative z-10 max-w-md w-full !bg-white px-8 py-10  rounded-lg shadow-lg">
+        <div className="flex justify-center pb-8">
+          <img
+            src="/icon/logo-pioneers.svg"
+            alt="Logo"
+            className="w-48 h-auto object-contain"
+          />
         </div>
 
-        <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">
-          Login
-        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

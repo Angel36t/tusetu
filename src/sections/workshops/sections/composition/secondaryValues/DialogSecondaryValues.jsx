@@ -1,6 +1,5 @@
 import { Dialog } from "@headlessui/react";
 import { useContext, useEffect, useState } from "react";
-
 import { VibrationContext } from "../../../context/VibrationContext";
 import { useSecondaryValues } from "./SecondaryValuesContext";
 
@@ -11,27 +10,33 @@ export const DialogSecondaryValues = () => {
     selectedMainValue: mainValue,
     selectedValues: secondaryValues,
     setSelectedValues,
-    allSelectedValues,
     handleSaveSelection,
+    mainValues, // traemos los mainValues
+    assignments, // traemos los assignments para filtrar solo otros mainValues
   } = useSecondaryValues();
 
-  const [maxLimitReached, setMaxLimitReached] = useState(false);
   const { records } = useContext(VibrationContext);
-
-  console.log(records);
-  
-
   const valuesData = records || [];
 
-  console.log(valuesData);
-  
+  // Calcula los valores que ya están asignados en otros main, excluyendo el mainValue actual.
+  const otherSelectedValues = Object.entries(assignments)
+    .filter(([key]) => key !== mainValue)
+    .reduce((acc, [key, value]) => {
+      // Si hay un valor dominante, lo agregamos (se podría omitir si solo te interesa secundarios)
+      if (value.dominant) {
+        acc.push(value.dominant);
+      }
+      return acc.concat(value.secondaryValues);
+    }, []);
+
+  const [maxLimitReached, setMaxLimitReached] = useState(false);
 
   const handleCheckboxChange = (value) => {
     setSelectedValues((prevSelectedValues) => {
       if (prevSelectedValues.includes(value)) {
         setMaxLimitReached(false);
         return prevSelectedValues.filter((item) => item !== value);
-      } else if (prevSelectedValues.length < 7) {
+      } else if (prevSelectedValues.length < 8) {
         return [...prevSelectedValues, value];
       } else {
         setMaxLimitReached(true);
@@ -41,7 +46,7 @@ export const DialogSecondaryValues = () => {
   };
 
   useEffect(() => {
-    setMaxLimitReached(secondaryValues.length >= 7);
+    setMaxLimitReached(secondaryValues.length >= 8);
   }, [secondaryValues]);
 
   return (
@@ -62,7 +67,7 @@ export const DialogSecondaryValues = () => {
         <div className="p-4 border-b flex items-center justify-center">
           <Dialog.Title className="text-lg font-bold text-center">
             Selecciona hasta <span className="text-red-500">8 valores</span>{" "}
-            para <span className="text-[#41A89C]">{mainValue}</span> 
+            para <span className="text-[#41A89C]">{mainValue}</span>
           </Dialog.Title>
         </div>
 
@@ -84,9 +89,10 @@ export const DialogSecondaryValues = () => {
           >
             {valuesData.map((value, index) => {
               const isSelected = secondaryValues.includes(value);
-              const isDisabled =
-                allSelectedValues.includes(value) && !isSelected;
-              const isMainValue = value === mainValue;
+              const isMainValue = mainValues.includes(value); // Valores principales deben quedar bloqueados
+
+              // El valor se bloqueará si está asignado en otro main (excluyendo el actual)
+              const isDisabled = !isSelected && otherSelectedValues.includes(value);
 
               return (
                 <label

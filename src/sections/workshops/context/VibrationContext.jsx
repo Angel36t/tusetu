@@ -1,32 +1,48 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useMemo } from "react";
+
+import { getRecords } from "../sections/composition/api/api";
 import vibrationCourseTemplate from "../sections/composition/config/vibrationCourseTemplate";
 
 export const VibrationContext = createContext({});
 
 export const VibrationProvider = ({ children }) => {
-  const [sections, setSections] = useState(vibrationCourseTemplate);
-  const flatLessons = sections.flatMap((section) => section.lessons);
-
-  // Función para encontrar la lección inicial basada en la URL
-  const getInitialLesson = () => {
-    const params = new URLSearchParams(window.location.search);
-    const lessonId = params.get("lessonId");
-    if (lessonId) {
-      const lessonFound = flatLessons.find(lesson => lesson.id === Number(lessonId));
-      if (lessonFound) {
-        return lessonFound;
-      }
-    }
-    return flatLessons[0]; // Si no hay lessonId o no se encuentra
-  };
-
-  const [activeLesson, setActiveLessonState] = useState(getInitialLesson);
+  const [sections, setSections] = useState([]);
+  const [records, setRecords] = useState(null);
+  const [activeLesson, setActiveLessonState] = useState(null); // 👈 empieza en null
   const [completedLessons, setCompletedLessons] = useState(() => {
     const saved = localStorage.getItem("completedLessons");
     return saved ? JSON.parse(saved) : [];
   });
-  
-  const [isCreative, setIsCreative] = useState(false);
+
+  const flatLessons = useMemo(() => {
+    return Array.isArray(sections)
+      ? sections.flatMap((section) => section.lessons)
+      : [];
+  }, [sections]);
+
+  useEffect(() => {
+    if (sections.length === 0) {
+      setSections(vibrationCourseTemplate || []);
+    }
+  }, [sections]);
+
+  // Inicializar la lección activa cuando flatLessons esté disponible
+  useEffect(() => {
+    if (flatLessons.length > 0 && !activeLesson) {
+      const params = new URLSearchParams(window.location.search);
+      const lessonId = params.get("lessonId");
+      if (lessonId) {
+        const foundLesson = flatLessons.find(
+          (lesson) => lesson.id === Number(lessonId)
+        );
+        if (foundLesson) {
+          setActiveLessonState(foundLesson);
+          return;
+        }
+      }
+      setActiveLessonState(flatLessons[0]); // Si no hay lessonId en URL, tomar la primera lección
+    }
+  }, [flatLessons, activeLesson]);
 
   const completeLesson = (lessonId) => {
     if (!completedLessons.includes(lessonId)) {
@@ -35,24 +51,51 @@ export const VibrationProvider = ({ children }) => {
   };
 
   const totalLessons = flatLessons.length;
-  const courseProgress = completedLessons.length / totalLessons;
+  const courseProgress = completedLessons.length / (totalLessons || 1); // para evitar dividir por 0
 
-  // Actualizar URL cuando cambie la lección activa
   const setActiveLesson = (lesson) => {
     setActiveLessonState(lesson);
     const params = new URLSearchParams(window.location.search);
     params.set("lessonId", lesson.id);
-    window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+    window.history.replaceState(
+      {},
+      "",
+      `${window.location.pathname}?${params}`
+    );
   };
 
   useEffect(() => {
-    // Opcional: Si quieres guardar en localStorage el último visto
-    localStorage.setItem("lastLessonId", activeLesson.id);
+    if (activeLesson) {
+      localStorage.setItem("lastLessonId", activeLesson.id);
+    }
   }, [activeLesson]);
 
   useEffect(() => {
     localStorage.setItem("completedLessons", JSON.stringify(completedLessons));
   }, [completedLessons]);
+
+  useEffect(() => {
+    const fetchRecords = async () => {
+      try {
+        const storedRecords = localStorage.getItem("vibration_records");
+        if (storedRecords) {
+          setRecords(JSON.parse(storedRecords));
+        } else {
+          const response = await getRecords();
+          const fetchedRecords = response.records.map((record) => record.value);
+          setRecords(fetchedRecords);
+          localStorage.setItem(
+            "vibration_records",
+            JSON.stringify(fetchedRecords)
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching records:", error);
+      }
+    };
+
+    fetchRecords();
+  }, []);
 
   return (
     <VibrationContext.Provider
@@ -64,7 +107,8 @@ export const VibrationProvider = ({ children }) => {
         completedLessons,
         totalLessons,
         courseProgress,
-        isCreative,
+        records,
+        setRecords,
       }}
     >
       {children}

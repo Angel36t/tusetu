@@ -18,26 +18,16 @@ const SummaryValues = () => {   // <-- Ya no exportas aquí
   const [currentPage, setCurrentPage] = useState(1);
   const [started, setStarted] = useState(false);
   const [viewMode, setViewMode] = useState("normal");
-  const { setRecords } = useContext(VibrationContext);
+  const { records } = useContext(VibrationContext);
 
   const totalPages = Math.ceil(values.length / ITEMS_PER_PAGE);
 
   useEffect(() => {
-    const fetchValues = async () => {
-      try {
-        setLoading(true);
-        const response = await getRecords();
-        const records = response.records.map((record) => record.value);
-        setRecords(records);
-        setValues(records);
-      } catch (err) {
-        setError("Error cargando datos. Por favor, intenta nuevamente.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchValues();
-  }, []);
+    if (records) {
+      setValues(records);
+      setLoading(false);
+    }
+  }, [records]);
 
   useEffect(() => {
     if (!started || timeLeft <= 0) return;

@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
+
 import {
   getPrimarySecondaryValues,
   registerPrimarySecondaryValues,
 } from "../../api/api";
 import { useUser } from "../../../../../../context/UserContext";
 import SecondaryValuesSkeleton from "../skeleton/SecondaryValuesSkeleton";
+import ErrorAlertSection from "../alerts/ErrorAlertSection";
 
 function DominantValue() {
   const [mainValues, setMainValues] = useState([]);
   const [dominantValues, setDominantValues] = useState({});
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [needsMainValues, setNeedsMainValues] = useState(false);
 
   const { user } = useUser();
   const userId = user.id;
@@ -29,14 +32,22 @@ function DominantValue() {
         setMainValues(formattedValues);
 
         const initialDominantValues = Object.fromEntries(
-          Object.entries(response.data.values).map(([key, value]) => [
-            key,
-            value.dominant,
-          ])
+          Object.entries(response.data.values).map(([key, value]) => {
+            const allValues = [key, ...(value.secondaryValues || [])];
+            return [
+              key,
+              allValues.includes(value.dominant) ? value.dominant : null,
+            ];
+          })
         );
         setDominantValues(initialDominantValues);
+
+        // Aquí verificas si no hay valores principales
+        if (formattedValues.length === 0) {
+          setNeedsMainValues(true);
+        }
       } catch (error) {
-        console.error("Error al cargar los valores:", error);
+        setNeedsMainValues(true);
       } finally {
         setLoading(false);
       }
@@ -76,10 +87,14 @@ function DominantValue() {
     }
   };
 
-  if (loading) {
+  if (needsMainValues) {
     return (
-      <SecondaryValuesSkeleton/>
+      <ErrorAlertSection/>
     );
+  }
+
+  if (loading) {
+    return <SecondaryValuesSkeleton />;
   }
 
   return (
@@ -128,7 +143,6 @@ function DominantValue() {
                       ? "bg-[#DAE462] text-black"
                       : "bg-[#D9E5EC] text-gray-800"
                   }`}
-
                 >
                   {main.name}
                 </div>
@@ -184,16 +198,14 @@ function DominantValue() {
         </tbody>
       </table>
 
-      {showConfirm && (
-        <div className="text-center mt-6">
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 bg-[#DAE462] text-black font-semibold rounded hover:bg-[#cdd85c] transition-colors duration-200"
-          >
-            Guardar valores dominantes
-          </button>
-        </div>
-      )}
+      <div className="text-center mt-6">
+        <button
+          onClick={handleSave}
+          className="px-4 py-2 bg-[#DAE462] text-black font-semibold rounded hover:bg-[#cdd85c] transition-colors duration-200"
+        >
+          Guardar valores dominantes
+        </button>
+      </div>
     </div>
   );
 }

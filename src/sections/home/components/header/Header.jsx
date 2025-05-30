@@ -74,7 +74,7 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white text-black to-transparent backdrop-blur-md" : "bg-transparent"
+        isScrolled ? "bg-[#FDF9ED] text-black to-transparent backdrop-blur-md" : "bg-transparent"
       }`}
     >
       <nav
@@ -83,11 +83,12 @@ export default function Header() {
       >
         <div className="flex items-center gap-8">
           <a href="#" className="-m-1.5 p-1.5 flex items-center gap-x-2">
-            <img
-              alt="Logo"
-              src="assets/logo/logo.svg"
-              className="h-16 w-auto max-md:h-12"
-            />
+          <img
+  alt="Logo"
+  src={isScrolled ? "assets/logo/logo-black.svg" : "assets/logo/logo.svg"}
+  className="h-16 w-auto max-md:h-12 transition-all duration-300"
+/>
+
           </a>
         </div>
 

@@ -71,7 +71,6 @@ export const SelectionView = ({ setLoading }) => {
         </>
       </button>
 
-      {error && <p className="text-red-500 text-center">{error}</p>}
 
       <ValuesSelectionGrid
         values={getPageValues()}
