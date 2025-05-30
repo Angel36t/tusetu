@@ -7,7 +7,23 @@ export default function UserDashboardRight() {
   const { user } = useUser();
   const [isVibrationModalOpen, setIsVibrationModalOpen] = useState(false);
 
-  const phrases = [/* ...tus frases motivacionales... */];
+  const phrases = [
+    "Cree en ti mismo y todo será posible.",
+    "El éxito es la suma de pequeños esfuerzos repetidos cada día.",
+    "Cada día es una nueva oportunidad para mejorar.",
+    "La constancia vence al talento cuando el talento no es constante.",
+    "No esperes por las oportunidades, créalas.",
+    "El único límite eres tú.",
+    "Levántate con determinación, acuéstate con satisfacción.",
+    "La disciplina es el puente entre metas y logros.",
+    "Hazlo con pasión o no lo hagas.",
+    "El futuro depende de lo que hagas hoy.",
+    "Persiste. Lo que hoy es difícil, mañana será tu orgullo.",
+    "No tienes que ser el mejor, solo mejor que ayer.",
+    "No se trata de tener tiempo, sino de hacer tiempo.",
+    "Las metas no se logran por suerte, se logran con esfuerzo.",
+    "Cada paso que das te acerca más a tu meta.",
+  ];
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -45,9 +61,7 @@ export default function UserDashboardRight() {
         <h2 className="text-xl">
           {getGreeting()}, {user.name} ☀️
         </h2>
-        <p className="text-sm mt-1 italic">
-          "{phrases[currentPhraseIndex]}"
-        </p>
+        <p className="text-sm mt-1 italic">"{phrases[currentPhraseIndex]}"</p>
       </div>
 
       {/* 🟨 Tres cuadros */}
